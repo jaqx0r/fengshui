@@ -200,7 +200,7 @@ class RackView:
 			self.ps.setgray(0.5)
 			self.ps.newpath()
 			self.ps.moveto(5, 5)
-			self.ps.show("(%s)" % (pos,))
+			self.ps.show("(%s)" % (pos+1,))
 			self.ps.grestore()
 		
 		if isinstance(element, rack.Rackmount):
