@@ -16,9 +16,10 @@ barwidth = 40
 bracketrad = 2
 
 class RackView:
-	def __init__(self):
+	def __init__(self, name):
 		self.options = []
 		self.ps = postscript.PostScript()
+		self.name = name
 		
 	def render(self, thing):
 		"""
@@ -38,7 +39,7 @@ class RackView:
 		self.ps.newpath()
 		self.ps.moveto(45, 45)
 		self.ps.rotate(90)
-		self.ps.show("(%s)" % (mx.DateTime.now().strftime("%c"),))
+		self.ps.show("(%s -- %s)" % (self.name, mx.DateTime.now().strftime("%c")))
 		self.ps.grestore()
 		
 		self.ps.translate(40, 40)

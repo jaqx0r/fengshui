@@ -140,4 +140,4 @@ if __name__ == '__main__':
 	ast = Parser(Scanner(SourceFile(f))).parse()
 	rack = RackBuilder().build(ast)
 	import rack2ps
-	print rack2ps.RackView().render(rack)
+	print rack2ps.RackView(f).render(rack)
