@@ -119,6 +119,17 @@ class RackView:
 		self.ps.moveto(10, element._units * unitsize)
 		self.ps.lineto(30, element._units * unitsize)
 		self.ps.stroke()
+		# arrowheads
+		self.ps.newpath()
+		self.ps.moveto(15, 10)
+		self.ps.lineto(20, 0)
+		self.ps.lineto(25, 10)
+		self.ps.stroke()
+		self.ps.newpath()
+		self.ps.moveto(15, element._units * unitsize - 10)
+		self.ps.lineto(20, element._units * unitsize)
+		self.ps.lineto(25, element._units * unitsize - 10)
+		self.ps.stroke()
 		# size label
 		self.ps.setgray(0.5)
 		self.ps.newpath()
