@@ -133,7 +133,8 @@ if __name__ == '__main__':
 	try:
 		f = sys.argv[1]
 	except IndexError:
-		f = "rack5.shui"
+		print "please specify input filename as first argument"
+		sys.exit(1)
 	ast = Parser(Scanner(SourceFile(f))).parse()
 	rack = RackBuilder().build(ast)
 	import rack2ps
