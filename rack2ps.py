@@ -174,7 +174,7 @@ class RackView:
 				self.visitEmptyRackElement()
 		elif isinstance(element, rack.CableManagement):
 			if 'nocablemanagement' not in self.options:
-				self.visitPatchPanel(element)
+				self.visitCableManagement(element)
 			else:
 				self.visitEmptyRackElement()
 		elif isinstance(element, rack.Shelf):
@@ -305,6 +305,47 @@ class RackView:
 		self.ps.newpath()
 		self.ps.moveto(5, element._height - 14 - 5)
 		self.ps.show("(%s)" % (element._name,))
+
+	def visitCableManagement(self, cman):
+		"""
+		@param cman: the cable management rack element
+		"""
+
+		self.ps.gsave()
+		self.ps.setgray(0)
+		
+		# draw outline
+		self.ps.newpath()
+		self.ps.moveto(0, 0)
+		self.ps.lineto(rackwidth, 0)
+		self.ps.lineto(rackwidth, cman._units * unitsize)
+		self.ps.lineto(0, cman._units * unitsize)
+		self.ps.closepath()
+		self.ps.stroke()
+
+		# draw cable holding things
+		for (fill, black) in [(self.ps.fill, 0.5),  (self.ps.stroke, 0)]:
+			for x in [x * rackwidth / 16.0 for x in [3, 8, 13]]:
+				self.ps.gsave()
+				self.ps.setgray(black)
+				
+				self.ps.moveto(x - 5, 0)
+				self.ps.lineto(x - 5, cman._units * unitsize / 2 - 5)
+				self.ps.lineto(x + 5, cman._units * unitsize / 2 - 5)
+				self.ps.lineto(x + 5, 0)
+				self.ps.closepath()
+				fill()
+
+				self.ps.moveto(x - 5, cman._units * unitsize)
+				self.ps.lineto(x - 5, cman._units * unitsize / 2 + 5)
+				self.ps.lineto(x + 5, cman._units * unitsize / 2 + 5)
+				self.ps.lineto(x + 5, cman._units * unitsize)
+				self.ps.closepath()
+				fill()
+			
+				self.ps.grestore()
+
+		self.ps.grestore()
 
 if __name__ == '__main__':
 	r = rack.Rack('rack asdfg', 47)
