@@ -162,6 +162,18 @@ class Gap(RackElement):
 	def visit(self, visitor):
 		visitor.visitGap(self)
 
+class Switch(RackElement):
+	def __init__(self, units=1, name="switch", network=1, power=1, cliplock=4):
+		RackElement.__init__(self,
+							 units,
+							 name,
+							 network,
+							 power,
+							 cliplock)
+
+	def visit(self, visitor):
+		visitor.visitSwitch(self)
+
 class Shelf(RackElement):
 	def __init__(self, units=1, name = "shelf", network=0, power=0, cliplock=4, gap=0):
 		RackElement.__init__(self, units, name, network, power, cliplock)

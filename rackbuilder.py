@@ -108,14 +108,14 @@ class RackBuilder:
 			re = rack.Rackmount(**attr)
 		elif t == "box":
 			re = rack.Box(**attr)
-		elif t == "switch":
-			re = rack.Box(**attr)
 		elif t == "cablemanagement":
 			re = rack.CableManagement(**attr)
 		elif t == "gap":
 			re = rack.Gap(**attr)
 		elif t == "apc":
 			re = rack.APC(**attr)
+		elif t == "switch":
+			re = rack.Switch(**attr)
 		return re
 
 	def visitEmptyAttributeList(self, ast, obj):

@@ -219,6 +219,11 @@ class RackView:
 				self.visitAPC(element)
 			else:
 				self.visitEmptyRackElement()
+		elif isinstance(element, rack.Switch):
+			if 'noswitch' not in self.options:
+				self.visitSwitch(element)
+			else:
+				self.visitEmptyRackElement()
 		elif isinstance(element, rack.Shelf):
 			if 'noshelf' not in self.options:
 				self.visitShelfArea(element)
@@ -273,6 +278,60 @@ class RackView:
 		@param apc: the APC master switch
 		"""
 		self.visitRackmount(apc)
+
+	def visitSwitch(self, switch):
+		"""
+		@param switch: the switch
+		"""
+		self.visitRackmount(switch)
+
+		iconheight = 25
+		offset = 8
+
+		# draw switch icon
+		self.ps.gsave()
+		self.ps.setgray(0)
+		self.ps.translate(rackwidth - 40, unitsize / 2.0 - (iconheight / 2.0))
+		self.ps.newpath()
+		self.ps.moveto(0, 0)
+		self.ps.lineto(offset, 0)
+		self.ps.lineto(iconheight - offset, iconheight)
+		self.ps.lineto(iconheight, iconheight)
+		self.ps.stroke()
+		self.ps.newpath()
+		self.ps.moveto(0, iconheight)
+		self.ps.lineto(offset, iconheight)
+		self.ps.lineto(iconheight - offset, 0)
+		self.ps.lineto(iconheight, 0)
+		self.ps.stroke()
+
+		arr = 3
+		# arrowheads
+		self.ps.newpath()
+		self.ps.moveto(arr, arr)
+		self.ps.lineto(0, 0)
+		self.ps.lineto(arr, -arr)
+		self.ps.closepath()
+		self.ps.fill()
+		self.ps.newpath()
+		self.ps.moveto(arr, iconheight + arr)
+		self.ps.lineto(0, iconheight)
+		self.ps.lineto(arr, iconheight - arr)
+		self.ps.closepath()
+		self.ps.fill()
+		self.ps.newpath()
+		self.ps.moveto(iconheight - arr, iconheight + arr)
+		self.ps.lineto(iconheight, iconheight)
+		self.ps.lineto(iconheight - arr, iconheight - arr)
+		self.ps.closepath()
+		self.ps.fill()
+		self.ps.newpath()
+		self.ps.moveto(iconheight - arr, arr)
+		self.ps.lineto(iconheight, 0)
+		self.ps.lineto(iconheight - arr, -arr)
+		self.ps.closepath()
+		self.ps.fill()
+		self.ps.grestore()
 
 	def visitGap(self, gap):
 		for y in range(0, gap.units):
