@@ -175,31 +175,31 @@ class RackView:
 			# side measurements
 			measure = self._image.createElement("g")
 			e.appendChild(measure)
-			measure.setAttribute("style", "stroke:#777;")
+			measure.setAttribute("style", "fill:none;stroke:black;")
 			# upper horz line
 			p1 = self._image.createElement("path")
 			measure.appendChild(p1)
-			p1.setAttribute("d", "M -50 0 -30 0")
+			p1.setAttribute("d", "M -50 0 L -30 0")
 			# lower horz line
 			p2 = self._image.createElement("path")
 			measure.appendChild(p2)
-			p2.setAttribute("d", "M -50 %s -30 %s" % (self._unitsize * element._units, self._unitsize * element._units))
+			p2.setAttribute("d", "M -50 %s L -30 %s" % (self._unitsize * element._units, self._unitsize * element._units))
 			# connecting line
 			p3 = self._image.createElement("path")
 			measure.appendChild(p3)
-			p3.setAttribute("d", "M -40 0 -40 %s" % (self._unitsize * element._units,))
+			p3.setAttribute("d", "M -40 0 L -40 %s" % (self._unitsize * element._units,))
 			# unit size label
 			label = self._image.createElement("text")
 			measure.appendChild(label)
-			label.setAttribute("x", "-45")
+			label.setAttribute("x", "-%s" % (44 + len("%s" % (element._units,)) * 23,))
 			label.setAttribute("y", "%s" % (self._unitsize * element._units / 2.0 + self._unitsize * 0.25,))
-			label.setAttribute("style", "fill:black;stroke:none;text-anchor:right;font-size:36pt;")
+			label.setAttribute("style", "fill:black;stroke:none;text-anchor:right;font-size:28pt;")
 			label.appendChild(self._image.createTextNode("%s" % (element._units,)))
 
 			# draw a position label right side of the rack
 			label = self._image.createElement("text")
 			re.appendChild(label)
-			label.setAttribute("x", "%s" % (self._rackwidth + 35,))
+			label.setAttribute("x", "%s" % (self._rackwidth + 25,))
 			label.setAttribute("y", "%s" % (self._unitsize * element._units - 10,))
 			label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-size:%spx;" % (self._unitsize * 0.5,))
 			label.appendChild(self._image.createTextNode("%s" % (pos,)))
@@ -229,7 +229,7 @@ class RackView:
 		# draw a position label right side of the rack
 		label = self._image.createElement("text")
 		e.appendChild(label)
-		label.setAttribute("x", "%s" % (self._rackwidth + 35,))
+		label.setAttribute("x", "%s" % (self._rackwidth + 25,))
 		label.setAttribute("y", "%s" % (self._unitsize - 10,))
 		label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-size:%spx;" % (self._unitsize * 0.5,))
 		label.appendChild(self._image.createTextNode("%s" % (pos,)))
@@ -262,7 +262,7 @@ class RackView:
 		label.appendChild(self._image.createTextNode(element._name))
 		label.setAttribute("x", "20")
 		label.setAttribute("y", "32")
-		label.setAttribute("style", "text-anchor:left;font-size:30pt;")
+		label.setAttribute("style", "text-anchor:left;font-size:26pt;")
 
 		return e
 
@@ -292,7 +292,7 @@ class RackView:
 		label.appendChild(self._image.createTextNode(panel._name))
 		label.setAttribute("x", "20")
 		label.setAttribute("y", "32")
-		label.setAttribute("style", "text-anchor:left;font-size:30pt;")
+		label.setAttribute("style", "text-anchor:left;font-size:26pt;")
 
 		return e
 
@@ -352,32 +352,33 @@ class RackView:
 		# there are 4 points in the left bracket
 		# 4 points in the shelf, and 4 points in the right bracket
 		sh.setAttribute("style", "fill:none;stroke:black;")
-		# bracket width, height
+		# bracket width, height, radius
 		bw = 15
 		bh = shelf._bracketunits * self._unitsize
+		rad = 2
 		# d is the complete path of the shelf shape
-		d = "M %s %s %s %s %s %s A %s %s %s %s %s %s %s L %s %s A %s %s %s %s %s %s %s L %s %s %s %s %s %s %s %s %s %s A %s %s %s %s %s %s %s L %s %s A %s %s %s %s %s %s %s L %s %s %s %s %s %s" % (
+		d = "M %s %s L %s %s %s %s A %s %s %s %s %s %s %s L %s %s A %s %s %s %s %s %s %s L %s %s %s %s %s %s %s %s %s %s A %s %s %s %s %s %s %s L %s %s A %s %s %s %s %s %s %s L %s %s %s %s %s %s" % (
 			# start at the baseline, which is relative to the bottom of the
 			# rack unit.  subtracted from self._unitsize which is the offset
 			# of the bottom of the rack unit
 			0, self._unitsize - shelf._baseline,
 			# move up to the top of the mounting bracket
 			0, self._unitsize - bh,
-			# move back 5 for a 5mm radius
-			- bw + 5, self._unitsize - bh,
+			# move back radius
+			- bw + rad, self._unitsize - bh,
 			# x, y radius
-			5, 5,
+			rad, rad,
 			# x axis rotation, large arc, sweep
 			0, 0, 0,
 			# and down to the point 5 units below the corner
-			- bw, self._unitsize - bh + 5,
+			- bw, self._unitsize - bh + rad,
 			# then down to the point 5 mm above the next corner
-			- bw, self._unitsize - 5,
+			- bw, self._unitsize - rad,
 			# then the bottom arc
-			5, 5,
+			rad, rad,
 			0, 0, 0,
-			# across to the bottom, 5mm in
-			- bw + 5, self._unitsize,
+			# across to the bottom, radmm in
+			- bw + rad, self._unitsize,
 			# and in to the bottom of the rack unit
 			0, self._unitsize,
 			# now from the bottom, go to the bottomline
@@ -388,17 +389,17 @@ class RackView:
 			self._rackwidth, self._unitsize,
 			# now the rest is the arc path along the right hand bracket,
 			# almost identical but opposite of the left bracket.
-			self._rackwidth + bw - 5, self._unitsize,
+			self._rackwidth + bw - rad, self._unitsize,
 			# arc radius
-			5, 5,
+			rad, rad,
 			0, 0, 0,
-			self._rackwidth + bw, self._unitsize - 5,
+			self._rackwidth + bw, self._unitsize - rad,
 			# line up
-			self._rackwidth + bw, self._unitsize - bh + 5,
+			self._rackwidth + bw, self._unitsize - bh + rad,
 			# top arc
-			5, 5,
+			rad, rad,
 			0, 0, 0,
-			self._rackwidth + bw - 5, self._unitsize - bh,
+			self._rackwidth + bw - rad, self._unitsize - bh,
 			# line inwards
 			self._rackwidth, self._unitsize - bh,
 			# line down to opposite point on baseline
@@ -447,7 +448,7 @@ class RackView:
 		label.appendChild(self._image.createTextNode(element._name))
 		label.setAttribute("x", "0")
 		label.setAttribute("y", "0")
-		label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-size:30pt;")
+		label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-size:26pt;")
 		# flip it right way up
 		label.setAttribute("transform", "translate(20,%s) scale(1,-1)" % (element._height - 32,))
 
