@@ -285,8 +285,9 @@ class RackView:
 		"""
 		self.visitRackmount(switch)
 
-		iconheight = 25
-		offset = 8
+		iconheight = 20
+		iconwidth = 25
+		offset = 7
 
 		# draw switch icon
 		self.ps.gsave()
@@ -295,17 +296,17 @@ class RackView:
 		self.ps.newpath()
 		self.ps.moveto(0, 0)
 		self.ps.lineto(offset, 0)
-		self.ps.lineto(iconheight - offset, iconheight)
-		self.ps.lineto(iconheight, iconheight)
+		self.ps.lineto(iconwidth - offset, iconheight)
+		self.ps.lineto(iconwidth, iconheight)
 		self.ps.stroke()
 		self.ps.newpath()
 		self.ps.moveto(0, iconheight)
 		self.ps.lineto(offset, iconheight)
-		self.ps.lineto(iconheight - offset, 0)
-		self.ps.lineto(iconheight, 0)
+		self.ps.lineto(iconwidth - offset, 0)
+		self.ps.lineto(iconwidth, 0)
 		self.ps.stroke()
 
-		arr = 3
+		arr = 4
 		# arrowheads
 		self.ps.newpath()
 		self.ps.moveto(arr, arr)
@@ -320,15 +321,15 @@ class RackView:
 		self.ps.closepath()
 		self.ps.fill()
 		self.ps.newpath()
-		self.ps.moveto(iconheight - arr, iconheight + arr)
-		self.ps.lineto(iconheight, iconheight)
-		self.ps.lineto(iconheight - arr, iconheight - arr)
+		self.ps.moveto(iconwidth - arr, iconheight + arr)
+		self.ps.lineto(iconwidth, iconheight)
+		self.ps.lineto(iconwidth - arr, iconheight - arr)
 		self.ps.closepath()
 		self.ps.fill()
 		self.ps.newpath()
-		self.ps.moveto(iconheight - arr, arr)
-		self.ps.lineto(iconheight, 0)
-		self.ps.lineto(iconheight - arr, -arr)
+		self.ps.moveto(iconwidth - arr, arr)
+		self.ps.lineto(iconwidth, 0)
+		self.ps.lineto(iconwidth - arr, -arr)
 		self.ps.closepath()
 		self.ps.fill()
 		self.ps.grestore()
