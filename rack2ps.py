@@ -120,7 +120,7 @@ class RackView:
 		# size label
 		self.ps.setgray(0.25)
 		self.ps.newpath()
-		self.ps.moveto(5, element._units * unitsize / 2)
+		self.ps.moveto(5, element._units * unitsize / 2 - 7)
 		self.ps.show("(%s)" % (element._units,))
 		self.ps.grestore()
 		
@@ -203,4 +203,5 @@ if __name__ == '__main__':
 	r = rack.Rack('rack', 47)
 	sa = rack.Shelf1RU(6)
 	r.addElement(1, sa)
+	r.addElement(8, rack.Rackmount(1, "rackmount"))
 	print RackView().render(r)
