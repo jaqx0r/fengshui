@@ -25,9 +25,6 @@ class RackView:
 
 		self.ps.translate(72, 72)
 		#self.ps.scale(0.3, 0.3)
-		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
-		self.ps.scalefont(20)
-		self.ps.setfont()
 		
 		if isinstance(thing, rack.RackArray):
 			self.visitRackArray(thing)
@@ -119,6 +116,9 @@ class RackView:
 		self.ps.stroke()
 		# size label
 		self.ps.setgray(0.25)
+		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
+		self.ps.scalefont(20)
+		self.ps.setfont()
 		self.ps.newpath()
 		self.ps.moveto(5, element._units * unitsize / 2 - 7)
 		self.ps.show("(%s)" % (element._units,))
@@ -162,7 +162,28 @@ class RackView:
 		"""
 		@param element the rackmount element
 		"""
-		pass
+
+		self.ps.gsave()
+		self.ps.setgray(0)
+
+		# outline of shape
+		self.ps.newpath()
+		self.ps.moveto(0, 0)
+		self.ps.lineto(rackwidth, 0)
+		self.ps.lineto(rackwidth, element._units * unitsize)
+		self.ps.lineto(0, element._units * unitsize)
+		self.ps.closepath()
+		self.ps.stroke()
+
+		# label
+		self.ps.findfont(self.ps.quote("Helvetica"))
+		self.ps.scalefont(20)
+		self.ps.setfont()
+		self.ps.newpath()
+		self.ps.moveto(5, element._units * unitsize - 14 - 5)
+		self.ps.show("(%s)" % (element._name,))
+		
+		self.ps.grestore()
 
 	def visitPatchPanel(self, panel):
 		"""
@@ -204,4 +225,5 @@ if __name__ == '__main__':
 	sa = rack.Shelf1RU(6)
 	r.addElement(1, sa)
 	r.addElement(8, rack.Rackmount(1, "rackmount"))
+	r.addElement(10, rack.Rackmount(2, "rackmount"))
 	print RackView().render(r)
