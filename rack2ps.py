@@ -122,7 +122,7 @@ class RackView:
 
 		# rack stats
 		self.ps.gsave()
-		size = 30
+		size = 40
 		self.ps.translate(5, -20 - size)
 		y = 0
 		self.ps.findfont(self.ps.quote("Helvetica"))
