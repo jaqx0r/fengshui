@@ -212,7 +212,7 @@ class RackView:
 			else:
 				self.visitEmptyRackElement()
 		elif isinstance(element, rack.Gap):
-			self.visitEmptyRackElement()
+			self.visitGap(element)
 		elif isinstance(element, rack.APC):
 			if 'noapc' not in self.options:
 				self.visitAPC(element)
@@ -274,7 +274,11 @@ class RackView:
 		self.visitRackmount(apc)
 
 	def visitGap(self, gap):
-		self.visitEmptyRackElement(self)
+		for y in range(0, gap.units):
+			self.ps.gsave()
+			self.ps.translate(0, y * unitsize)
+			self.visitEmptyRackElement()
+			self.ps.grestore()
 
 	def visitShelfArea(self, shelf):
 		"""
