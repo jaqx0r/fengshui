@@ -9,7 +9,7 @@ class OutOfRackException:
 class RackFullException:
 	pass
 
-class Rack:
+class Rack(object):
 	def __init__(self, name, units):
 		self._name = name
 		self.units = units
@@ -55,6 +55,15 @@ class Rack:
 
 	units = property(_get_units, _set_units)
 
+	def _get_power(self):
+		n = 0
+		for e in self._elements.keys():
+			if self._elements[e] is not None:
+				n += self._elements[e].power
+		return n
+
+	power = property(_get_power)
+
 	def __iadd__(self, o):
 		if self.affinity == "bottom":
 			r = range(0, self.units - o.units + 1)
@@ -87,7 +96,7 @@ class RackElement(object):
 	def __init__(self, units=1, name="rack element", network=1, power=1, cliplock=4):
 		self.units = units
 		self.name = name
-		self.networkports = network
+		self.network = network
 		self.power = power
 		self.cliplock = cliplock
 
@@ -101,6 +110,22 @@ class RackElement(object):
 		self._units = int(value)
 
 	units = property(_get_units, _set_units)
+
+	def _get_network(self):
+		return self.__network
+
+	def _set_network(self, value):
+		self.__network = int(value)
+
+	network = property(_get_network, _set_network)
+
+	def _get_power(self):
+		return self.__power
+
+	def _set_power(self, value):
+		self.__power = int(value)
+
+	power = property(_get_power, _set_power)
 
 class Rackmount(RackElement):
 	def __init__(self, units=1, name="rackmount", network=1, power=1, cliplock=1):
@@ -149,12 +174,26 @@ class Shelf(RackElement):
 		visitor.visitShelf(self)
 
 	def _get_network(self):
-		ports = self.network
+		n = self.__network
 		for e in self._elements:
-			ports += e.network
-		return ports
+			n += e.network
+		return n
 
-	network = property(_get_network)
+	def _set_network(self, value):
+		self.__network = int(value)
+
+	network = property(_get_network, _set_network)
+
+	def _get_power(self):
+		n = self.__power
+		for e in self._elements:
+			n += e.power
+		return n
+
+	def _set_power(self, value):
+		self.__power = int(value)
+
+	power = property(_get_power, _set_power)
 
 	def __iadd__(self, o):
 		self._elements.append(o)

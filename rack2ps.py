@@ -119,6 +119,23 @@ class RackView:
 
 			self.ps.grestore()
 
+		# rack stats
+		self.ps.gsave()
+		size = 30
+		self.ps.translate(5, -20 - size)
+		y = 0
+		self.ps.findfont(self.ps.quote("Helvetica"))
+		self.ps.scalefont(size)
+		self.ps.setfont()
+		for (k, v) in [("network port", rack.network),
+					   ("power outlet", rack.power)
+			]:
+			self.ps.newpath()
+			self.ps.moveto(0, y)
+			self.ps.show("(%s %s%s)" % (v, k, ["", "s"][v > 1]))
+			y -= size
+		self.ps.grestore()
+
 		# pop off the stack
 		self.ps.grestore()
 
