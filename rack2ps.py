@@ -25,6 +25,9 @@ class RackView:
 
 		self.ps.translate(72, 72)
 		#self.ps.scale(0.3, 0.3)
+		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
+		self.ps.scalefont(20)
+		self.ps.setfont()
 		
 		if isinstance(thing, rack.RackArray):
 			self.visitRackArray(thing)
@@ -91,6 +94,36 @@ class RackView:
 		@param element the element to render
 		@param pos position in the rack of this element
 		"""
+
+		if element is None:
+			return
+		
+		# render the height bar on the left side of the rack
+		self.ps.gsave()
+		self.ps.setgray(0.5)
+		# reset frame of reference
+		self.ps.translate(-bracketwidth-barwidth, 0)
+		
+		self.ps.newpath()
+		self.ps.moveto(20, 0)
+		self.ps.lineto(20, element._units * unitsize)
+		self.ps.stroke()
+		# top and bottom edges
+		self.ps.newpath()
+		self.ps.moveto(10, 0)
+		self.ps.lineto(30, 0)
+		self.ps.stroke()
+		self.ps.newpath()
+		self.ps.moveto(10, element._units * unitsize)
+		self.ps.lineto(30, element._units * unitsize)
+		self.ps.stroke()
+		# size label
+		self.ps.setgray(0.25)
+		self.ps.newpath()
+		self.ps.moveto(5, element._units * unitsize / 2)
+		self.ps.show("(%s)" % (element._units,))
+		self.ps.grestore()
+		
 		if isinstance(element, rack.Rackmount):
 			if 'norackmount' not in self.options:
 				self.visitRackmount(element)
@@ -168,6 +201,6 @@ class RackView:
 
 if __name__ == '__main__':
 	r = rack.Rack('rack', 47)
-	sa = rack.Shelf1RU(11)
+	sa = rack.Shelf1RU(6)
 	r.addElement(1, sa)
 	print RackView().render(r)
