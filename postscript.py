@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import string
+
 class PostScript:
 	"""
 	Level 1 PostScript rendering.
@@ -7,7 +9,7 @@ class PostScript:
 	def __init__(self):
 		self.o = []
 		self.indent = 0
-		self.functions = ["moveto",
+		self.operators = ["moveto",
 						  "lineto",
 						  "rlineto",
 						  "newpath",
@@ -27,7 +29,12 @@ class PostScript:
 						  "setgray",
 						  "setlinewidth"
 						  ]
-						  
+		self.prelude = ["%!",
+					   "%%Creator: FengShui"
+					   ]
+		self.trailer = ["showpage",
+						"%%EOF"
+						]
 						  
 	def append(self, command):
 		self.o.append(" " * self.indent + command)
@@ -44,11 +51,7 @@ class PostScript:
 		self.append("%% %s" % (comment,))
 
 	def render(self):
-		output = "%!\n"
-		for line in self.o:
-			output += line + "\n"
-		output += "showpage\n"
-		return output
+		return string.join(self.prelude + self.o + self.trailer, '\n')
 
 	def quote(self, arg):
 		"""quote the argument from expansion"""
@@ -58,7 +61,7 @@ class PostScript:
 		self.append((("%s " * len(args)) % args) + cmd)
 
 	def __getattr__(self, cmd):
-		if cmd not in self.functions:
+		if cmd not in self.operators:
 			raise AttributeError, "PostScript instance has no attribute '%s'" % (cmd,)
 		r = lambda *args: self.command(cmd, *args)
 		return r
