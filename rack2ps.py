@@ -292,7 +292,7 @@ class RackView:
 		# draw switch icon
 		self.ps.gsave()
 		self.ps.setgray(0)
-		self.ps.translate(rackwidth - 40, unitsize / 2.0 - (iconheight / 2.0))
+		self.ps.translate(rackwidth - iconwidth - 10, switch.units * unitsize - unitsize / 2.0 - (iconheight / 2.0))
 		self.ps.newpath()
 		self.ps.moveto(0, 0)
 		self.ps.lineto(offset, 0)
