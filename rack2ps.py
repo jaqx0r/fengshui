@@ -14,158 +14,126 @@ class RackView:
 		
 		self._rackheight = self._unitsize * 47
 		self._rackwidth = 445
+
+		self.ps = postscript.PostScript()
 		
 	def render(self, thing):
 		"""
 		@param thing the rack or racks to be drawn
 		"""
-		# o is the output
-		o = []
 
+		self.ps.setlinewidth(1)
+		self.ps.setgray(0)
+		self.ps.translate(72, 72)
+		self.ps.scale(0.3, 0.3)
+		
 		if isinstance(thing, rack.RackArray):
-			o += self.visitRackArray(thing)
+			self.visitRackArray(thing)
 		elif isinstance(thing, rack.Rack):
-			o += self.visitRack(thing)
+			self.visitRack(thing)
 		else:
 			raise RenderingDumbThingException
 
-		output = "%!\n0.2 0.2 scale\n0 setgray\n"
-		psv = postscript.PostScriptRenderer()
-		for x in o:
-			output += x.visit(psv)
-		output += "showpage\n"
-		return output
+		return self.ps.render()
 
 	def visitRackArray(self, racks):
-		o = []
-
 		for rack in racks._elements:
-			o += self.visitRack(rack)
-
-		return o
+			self.visitRack(rack)
 
 	def visitRack(self, rack):
 		"""
 		@param rack the rack being visited
 		"""
-		o = []
 
-		o.append(postscript.NewPath())
-		o.append(postscript.MoveTo(0, 0))
-		o.append(postscript.LineTo(0, self._rackheight))
-		o.append(postscript.LineTo(self._rackwidth, self._rackheight))
-		o.append(postscript.LineTo(self._rackwidth, 0))
-		o.append(postscript.ClosePath())
-		o.append(postscript.Stroke())
+		self.ps.newpath()
+		self.ps.moveto(0, 0)
+		self.ps.lineto(0, self._rackheight)
+		self.ps.lineto(self._rackwidth, self._rackheight)
+		self.ps.lineto(self._rackwidth, 0)
+		self.ps.closepath()
+		self.ps.stroke()
 				 
 		for y in range(0, rack._units):
 			if rack._elements.has_key(y):
 				e = rack._elements[y]
-				o += self.visitRackElement(e, y)
+				self.visitRackElement(e, y)
 			else:
-				o += self.visitEmptyRackElement()
-
-		return o
+				self.visitEmptyRackElement()
 
 	def visitRackElement(self, element, pos):
 		"""
 		@param element the element to render
 		@param pos position in the rack of this element
 		"""
-		o = []
 		if isinstance(element, rack.Rackmount):
 			if 'norackmount' not in self.options:
-				re = self.visitRackmount(element)
+				self.visitRackmount(element)
 			else:
-				re = self.visitEmptyRackElement()
+				self.visitEmptyRackElement()
 		elif isinstance(element, rack.PatchPanel):
 			if 'nopatchpanel' not in self.options:
-				re = self.visitPatchPanel(element)
+				self.visitPatchPanel(element)
 			else:
-				re = self.visitEmptyRackElement()
+				self.visitEmptyRackElement()
 		elif isinstance(element, rack.CableManagement):
 			if 'nocablemanagement' not in self.options:
-				re = self.visitPatchPanel(element)
+				self.visitPatchPanel(element)
 			else:
-				re = self.visitEmptyRackElement()
+				self.visitEmptyRackElement()
 		elif isinstance(element, rack.Shelf):
 			if 'noshelf' not in self.options:
-				re = self.visitShelfArea(element)
+				self.visitShelfArea(element)
 			else:
 				for i in range(pos, pos + element._units):
 					_ = i
-					re = self.visitEmptyRackElement()
-		else:
-			#re = self.visitEmptyRackElement(pos)
-			re = None
-
-		if re is not None:
-			o += re
-
-		return o
+					self.visitEmptyRackElement()
+		#else:
+		#	#re = self.visitEmptyRackElement(pos)
+		#	re = None
 
 	def visitEmptyRackElement(self):
-		o = []
-		
-		return o
+		pass
 
 	def visitRackmount(self, element):
 		"""
 		@param element the rackmount element
 		"""
-		o = []
-
-		return o
+		pass
 
 	def visitPatchPanel(self, panel):
 		"""
 		@param panel the patchpanel element
 		"""
-		o = []
-
-		return o
+		pass
 
 	def visitShelfArea(self, shelf):
 		"""
 		@param shelf the shelf element
 		"""
-		# o is the output
-		o = []
-		
-		o.append(postscript.NewPath())
-		o.append(postscript.MoveTo(0, 0))
-		o.append(postscript.LineTo(self._rackwidth, 0))
-		o.append(postscript.LineTo(self._rackwidth, self._unitsize * shelf._units))
-		o.append(postscript.LineTo(0, self._unitsize * shelf._units))
-		o.append(postscript.ClosePath())
+
+		self.ps.newpath()
+		self.ps.moveto(0, 0)
+		self.ps.lineto(self._rackwidth, 0)
+		self.ps.lineto(self._rackwidth, self._unitsize * shelf._units)
+		self.ps.lineto(0, self._unitsize * shelf._units)
+		self.ps.closepath()
 
 		for e in shelf._elements:
-			o += self.visitShelfElement(e)
-
-		return o
+			self.visitShelfElement(e)
 
 	def visitShelf(self, shelf):
-		o = []
-
-		return o
+		pass
 
 	def visitShelfElement(self, element):
 		"""
 		@param element the element to render
 		"""
-		# o is the output
-		o = []
-
-		o.append(postscript.NewPath())
-
-		o.append(postscript.MoveTo(0, 0))
-		o.append(postscript.LineTo(element._width, 0))
-		o.append(postscript.LineTo(element._width, element._height))
-		o.append(postscript.LineTo(0, element._height))
-
-		o.append(postscript.ClosePath())
-
-		return o
+		self.ps.newpath()
+		self.ps.moveto(0, 0)
+		self.ps.lineto(element._width, 0)
+		self.ps.lineto(element._width, element._height)
+		self.ps.lineto(0, element._height)
+		self.ps.closepath()
 
 if __name__ == '__main__':
 	r = rack.Rack('rack', 47)

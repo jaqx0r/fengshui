@@ -47,6 +47,7 @@ class PostScript:
 		output = "%!\n"
 		for line in self.o:
 			output += line + "\n"
+		output += "showpage\n"
 		return output
 
 	def quote(self, arg):
