@@ -61,8 +61,11 @@ class RackView:
 
 		self._top.setAttribute("viewBox", "0 0 %s %s" % (w, h))
 
-		self._top.setAttribute("width", "%spx" % (w,))
-		self._top.setAttribute("height", "%spx" % (h,))
+		#self._top.setAttribute("width", "%spx" % (w,))
+		#self._top.setAttribute("height", "%spx" % (h,))
+
+		self._top.setAttribute("width", "1010px")
+		self._top.setAttribute("height", "650px")
 
 		return self._image.toxml()
 
@@ -112,7 +115,7 @@ class RackView:
 		lab.appendChild(self._image.createTextNode(rack._name))
 		lab.setAttribute("y", "37")
 		lab.setAttribute("x", "20")
-		lab.setAttribute("style", "font-size:40pt;")
+		lab.setAttribute("style", "font-family:sans-serif;font-size:40pt;")
 		
 		# draw the outline of the rack
 		rect = self._image.createElement("rect")
@@ -193,7 +196,7 @@ class RackView:
 			measure.appendChild(label)
 			label.setAttribute("x", "-%s" % (44 + len("%s" % (element._units,)) * 23,))
 			label.setAttribute("y", "%s" % (self._unitsize * element._units / 2.0 + self._unitsize * 0.25,))
-			label.setAttribute("style", "fill:black;stroke:none;font-size:28pt;")
+			label.setAttribute("style", "fill:black;stroke:none;font-family:sans-serif;font-size:28pt;")
 			label.appendChild(self._image.createTextNode("%s" % (element._units,)))
 
 			# draw a position label right side of the rack
@@ -201,7 +204,7 @@ class RackView:
 			re.appendChild(label)
 			label.setAttribute("x", "%s" % (self._rackwidth + 25,))
 			label.setAttribute("y", "%s" % (self._unitsize * element._units - 10,))
-			label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-size:%spx;" % (self._unitsize * 0.5,))
+			label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-family:sans-serif;font-size:%spx;" % (self._unitsize * 0.5,))
 			label.appendChild(self._image.createTextNode("%s" % (pos,)))
 
 		return e
@@ -231,7 +234,7 @@ class RackView:
 		e.appendChild(label)
 		label.setAttribute("x", "%s" % (self._rackwidth + 25,))
 		label.setAttribute("y", "%s" % (self._unitsize - 10,))
-		label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-size:%spx;" % (self._unitsize * 0.5,))
+		label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-family:sans-serif;font-size:%spx;" % (self._unitsize * 0.5,))
 		label.appendChild(self._image.createTextNode("%s" % (pos,)))
 
 
@@ -262,7 +265,7 @@ class RackView:
 		label.appendChild(self._image.createTextNode(element._name))
 		label.setAttribute("x", "20")
 		label.setAttribute("y", "32")
-		label.setAttribute("style", "text-anchor:left;font-size:26pt;")
+		label.setAttribute("style", "text-anchor:left;font-family:sans-serif;font-size:26pt;")
 
 		return e
 
@@ -292,7 +295,7 @@ class RackView:
 		label.appendChild(self._image.createTextNode(panel._name))
 		label.setAttribute("x", "20")
 		label.setAttribute("y", "32")
-		label.setAttribute("style", "text-anchor:left;font-size:26pt;")
+		label.setAttribute("style", "text-anchor:left;font-family:sans-serif;font-size:26pt;")
 
 		return e
 
@@ -416,7 +419,7 @@ class RackView:
 		label.setAttribute("x", "20")
 		# put label on bottomline
 		label.setAttribute("y", "%s" % (self._unitsize - shelf._bottomline - 2,))
-		label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-size:20pt;")
+		label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-family:sans-serif;font-size:20pt;")
 
 		return e
 
@@ -448,7 +451,7 @@ class RackView:
 		label.appendChild(self._image.createTextNode(element._name))
 		label.setAttribute("x", "0")
 		label.setAttribute("y", "0")
-		label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-size:26pt;")
+		label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-family:sans-serif;font-size:26pt;")
 		# flip it right way up
 		label.setAttribute("transform", "translate(20,%s) scale(1,-1)" % (element._height - 32,))
 
