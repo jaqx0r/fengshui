@@ -133,7 +133,7 @@ class RackView:
 			]:
 			self.ps.newpath()
 			self.ps.moveto(0, y)
-			self.ps.show("(%s %s%s)" % (v, k, ["", "s"][v > 1]))
+			self.ps.show("(%s %s%s)" % (v, k, ["s", ""][v == 1]))
 			y -= size
 		self.ps.grestore()
 
