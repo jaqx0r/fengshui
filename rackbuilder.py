@@ -57,9 +57,11 @@ class RackBuilder:
 			t = attr['type']
 			del attr['type']
 		else:
-			t = "heavy"
+			t = "1a"
 
-		if t == "heavy":
+		if t == "1a":
+			s = rack.Shelf1a(**attr)
+		elif t == "heavy":
 			s = rack.Shelf1RU(**attr)
 		elif t == "thin":
 			s = rack.Shelf2U(**attr)

@@ -256,6 +256,16 @@ class Shelf2U(Shelf):
 	def visit(self, visitor):
 		visitor.visitShelf2U(self)
 
+class Shelf1a(Shelf):
+	def __init__(self, units=1, name="1U shelf",network=0,power=0,cliplock=0,gap=0):
+		Shelf.__init__(self, units, name, network, power, cliplock, gap)
+		self._baseline = 35
+		self._bottomline = 10
+		self._bracketunits = 1
+
+	def visit(self, visitor):
+		visitor.visitShelf1a(self)
+
 class ShelfElement(object):
 	def __init__(self, height=0, width=0, name="shelf element", network=1, power=1, cliplock=0):
 		self.width = width
