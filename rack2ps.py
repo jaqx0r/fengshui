@@ -292,14 +292,14 @@ class RackView:
 
 if __name__ == '__main__':
 	r = rack.Rack('rack', 47)
-	sa = rack.Shelf1RU(6)
+	sa = rack.Shelf2U(6)
 	r.addElement(1, sa)
 	r.addElement(8, rack.Rackmount(1, "rackmount 1"))
 	r.addElement(10, rack.Rackmount(2, "rackmount 2"))
 
 	r.addElement(13, rack.PatchPanel(1, "12p patch panel"))
 
-	s = rack.Shelf2U(3)
+	s = rack.Shelf1RU(3)
 	r.addElement(15, s)
 
 	sa.addElement(rack.Box(200, 100, "box A"))
