@@ -3,6 +3,8 @@
 import rack
 import postscript
 
+import mx.DateTime
+
 class RenderingDumbThingException(Exception):
 	pass
 
@@ -23,13 +25,23 @@ class RackView:
 		@param thing the rack or racks to be drawn
 		"""
 
-		self.ps.translate(36, 36)
-		self.ps.scale(0.3, 0.3)
 
 		# set the font we're using for the whole picture
 		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
 		self.ps.scalefont(20)
 		self.ps.setfont()
+
+		self.ps.gsave()
+		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
+		self.ps.scalefont(10)
+		self.ps.setfont()
+		self.ps.newpath()
+		self.ps.moveto(10, 10)
+		self.ps.show("(%s)" % (mx.DateTime.now(),))
+		self.ps.grestore()
+		
+		self.ps.translate(40, 40)
+		self.ps.scale(0.3, 0.3)
 		
 		if isinstance(thing, rack.RackArray):
 			self.visitRackArray(thing)
