@@ -33,10 +33,11 @@ class RackView:
 
 		self.ps.gsave()
 		self.ps.findfont(self.ps.quote("Helvetica"))
-		self.ps.scalefont(10)
+		self.ps.scalefont(7)
 		self.ps.setfont()
 		self.ps.newpath()
-		self.ps.moveto(10, 10)
+		self.ps.moveto(45, 45)
+		self.ps.rotate(90)
 		self.ps.show("(%s)" % (mx.DateTime.now().strftime("%c"),))
 		self.ps.grestore()
 		
