@@ -38,10 +38,23 @@ class Shelf(RackElement):
 		RackElement.__init__(self, units, name)
 
 		self._elements = []
-		self._baseline = 10
+		self.baseline = 45
+		self.bottomline = 0
 
 	def addElement(self, element):
 		self._elements.append(element)
+
+class Shelf1RU(Shelf):
+	def __init__(self, units, name = "1RU shelf w/ rails"):
+		Shelf.__init__(self, units, name)
+		self._baseline = 35
+		self._bottomline = 10
+
+class Shelf2U(Shelf):
+	def __init__(self, units, name = "2U shelf w/ 30kg rating"):
+		Shelf.__init__(self, units, name)
+		self._baseline = 0
+		self._bottomline = -15
 
 class ShelfElement:
 	def __init__(self, width, height, name = "shelf element"):
