@@ -1,0 +1,14 @@
+rack example {
+	affinity=top
+
+	switch[type=switch]
+	x [type=cablemanagement]
+	kvm [label="Masterview Pro CS-1016",units=2]
+	alcatel [label="Alcatel OmniPCX 4400",units=3]
+	shelf {
+		storedge [type=box,width=440,height=170,label="Sun StorEDGE A1000"]
+	}
+	shelf {
+		dell [type=box,height=305,width=435,label="Dell"]
+	}
+}
