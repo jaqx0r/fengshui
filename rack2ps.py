@@ -148,52 +148,53 @@ class RackView:
 
 		if element is None:
 			return
-		
-		# render the height bar on the left side of the rack
-		self.ps.gsave()
-		self.ps.setgray(0.6)
-		# reset frame of reference
-		self.ps.translate(-bracketwidth-barwidth, 0)
-		
-		self.ps.newpath()
-		self.ps.moveto(20, 0)
-		self.ps.lineto(20, element.units * unitsize)
-		self.ps.stroke()
-		# top and bottom edges
-		self.ps.newpath()
-		self.ps.moveto(10, 0)
-		self.ps.lineto(30, 0)
-		self.ps.stroke()
-		self.ps.newpath()
-		self.ps.moveto(10, element.units * unitsize)
-		self.ps.lineto(30, element.units * unitsize)
-		self.ps.stroke()
-		# arrowheads
-		self.ps.newpath()
-		self.ps.moveto(15, 10)
-		self.ps.lineto(20, 0)
-		self.ps.lineto(25, 10)
-		self.ps.stroke()
-		self.ps.newpath()
-		self.ps.moveto(15, element.units * unitsize - 10)
-		self.ps.lineto(20, element.units * unitsize)
-		self.ps.lineto(25, element.units * unitsize - 10)
-		self.ps.stroke()
-		# size label
-		self.ps.setgray(0.5)
-		self.ps.newpath()
-		self.ps.moveto(5, element.units * unitsize / 2 - 7)
-		self.ps.show("(%s)" % (element.units,))
-		self.ps.grestore()
 
-		# draw rack unit position on the right hand side
-		self.ps.gsave()
-		self.ps.translate(rackwidth + bracketwidth, 0)
-		self.ps.setgray(0.5)
-		self.ps.newpath()
-		self.ps.moveto(5, 5)
-		self.ps.show("(%s)" % (pos,))
-		self.ps.grestore()
+		if not isinstance(element, rack.Gap):
+			# render the height bar on the left side of the rack
+			self.ps.gsave()
+			self.ps.setgray(0.6)
+			# reset frame of reference
+			self.ps.translate(-bracketwidth-barwidth, 0)
+		
+			self.ps.newpath()
+			self.ps.moveto(20, 0)
+			self.ps.lineto(20, element.units * unitsize)
+			self.ps.stroke()
+			# top and bottom edges
+			self.ps.newpath()
+			self.ps.moveto(10, 0)
+			self.ps.lineto(30, 0)
+			self.ps.stroke()
+			self.ps.newpath()
+			self.ps.moveto(10, element.units * unitsize)
+			self.ps.lineto(30, element.units * unitsize)
+			self.ps.stroke()
+			# arrowheads
+			self.ps.newpath()
+			self.ps.moveto(15, 10)
+			self.ps.lineto(20, 0)
+			self.ps.lineto(25, 10)
+			self.ps.stroke()
+			self.ps.newpath()
+			self.ps.moveto(15, element.units * unitsize - 10)
+			self.ps.lineto(20, element.units * unitsize)
+			self.ps.lineto(25, element.units * unitsize - 10)
+			self.ps.stroke()
+			# size label
+			self.ps.setgray(0.5)
+			self.ps.newpath()
+			self.ps.moveto(5, element.units * unitsize / 2 - 7)
+			self.ps.show("(%s)" % (element.units,))
+			self.ps.grestore()
+
+			# draw rack unit position on the right hand side
+			self.ps.gsave()
+			self.ps.translate(rackwidth + bracketwidth, 0)
+			self.ps.setgray(0.5)
+			self.ps.newpath()
+			self.ps.moveto(5, 5)
+			self.ps.show("(%s)" % (pos,))
+			self.ps.grestore()
 		
 		if isinstance(element, rack.Rackmount):
 			if 'norackmount' not in self.options:
