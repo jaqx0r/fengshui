@@ -32,15 +32,15 @@ class RackView:
 		self.ps.scalefont(20)
 		self.ps.setfont()
 
-		self.ps.gsave()
-		self.ps.findfont(self.ps.quote("Helvetica"))
-		self.ps.scalefont(7)
-		self.ps.setfont()
-		self.ps.newpath()
-		self.ps.moveto(45, 45)
-		self.ps.rotate(90)
-		self.ps.show("(%s -- %s)" % (self.name, mx.DateTime.now().strftime("%c")))
-		self.ps.grestore()
+# 		self.ps.gsave()
+# 		self.ps.findfont(self.ps.quote("Helvetica"))
+# 		self.ps.scalefont(7)
+# 		self.ps.setfont()
+# 		self.ps.newpath()
+# 		self.ps.moveto(45, 45)
+# 		self.ps.rotate(90)
+# 		self.ps.show("(%s -- %s)" % (self.name, mx.DateTime.now().strftime("%c")))
+# 		self.ps.grestore()
 		
 		self.ps.translate(40, 40)
 		self.ps.scale(0.3, 0.3)
@@ -99,15 +99,15 @@ class RackView:
 		self.ps.stroke()
 		self.ps.grestore()
 
-		# rack label
-		self.ps.gsave()
-		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
-		self.ps.scalefont(50)
-		self.ps.setfont()
-		self.ps.newpath()
-		self.ps.moveto(5, rackheight + 15)
-		self.ps.show("(%s)" % (rack._name,))
-		self.ps.grestore()
+# 		# rack label
+# 		self.ps.gsave()
+# 		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
+# 		self.ps.scalefont(50)
+# 		self.ps.setfont()
+# 		self.ps.newpath()
+# 		self.ps.moveto(5, rackheight + 15)
+# 		self.ps.show("(%s)" % (rack._name,))
+# 		self.ps.grestore()
 				 
 		for y in range(0, rack.units):
 			self.ps.gsave()
@@ -121,28 +121,28 @@ class RackView:
 
 			self.ps.grestore()
 
-		# rack stats
-		self.ps.gsave()
-		size = 40
-		self.ps.translate(5, -20 - size)
-		y = 0
-		self.ps.findfont(self.ps.quote("Helvetica"))
-		self.ps.scalefont(size)
-		self.ps.setfont()
-		for (k, v) in [("network port", rack.network),
-					   ("power outlet", rack.power)
-					   ]:
-			self.ps.newpath()
-			self.ps.moveto(0, y)
-			self.ps.show("(%s %s%s)" % (v, k, ["s", ""][v == 1]))
-			y -= size
-		for (k, v) in [("mm deep", rack.depth),
-					   ]:
-			self.ps.newpath()
-			self.ps.moveto(0, y)
-			self.ps.show("(%s%s)" % (v, k))
-			y -= size
-		self.ps.grestore()
+# 		# rack stats
+# 		self.ps.gsave()
+# 		size = 40
+# 		self.ps.translate(5, -20 - size)
+# 		y = 0
+# 		self.ps.findfont(self.ps.quote("Helvetica"))
+# 		self.ps.scalefont(size)
+# 		self.ps.setfont()
+# 		for (k, v) in [("network port", rack.network),
+# 					   ("power outlet", rack.power)
+# 					   ]:
+# 			self.ps.newpath()
+# 			self.ps.moveto(0, y)
+# 			self.ps.show("(%s %s%s)" % (v, k, ["s", ""][v == 1]))
+# 			y -= size
+# 		for (k, v) in [("mm deep", rack.depth),
+# 					   ]:
+# 			self.ps.newpath()
+# 			self.ps.moveto(0, y)
+# 			self.ps.show("(%s%s)" % (v, k))
+# 			y -= size
+# 		self.ps.grestore()
 
 		# pop off the stack
 		self.ps.grestore()

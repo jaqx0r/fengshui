@@ -32,13 +32,14 @@ class PostScript:
 						  "setlinewidth",
 						  "showpage"
 						  ]
-		self.prelude = ["%!",
+		self.prelude = ["%!PS-Adobe EPSF-3.0",
 						"%%Creator: FengShui",
+						"%%BoundingBox: 36 36 205 660",
+						"%%Pages: 1",
 						"%%EndComment",
 						"%%Page: 1",
 					   ]
-		self.trailer = ["showpage",
-						"%%Trailer:",
+		self.trailer = ["%%Trailer:",
 						"%%EOF"
 						]
 						  
