@@ -128,11 +128,18 @@ class RackElement(object):
 	power = property(_get_power, _set_power)
 
 class Rackmount(RackElement):
-	def __init__(self, units=1, name="rackmount", network=1, power=1, cliplock=1):
+	def __init__(self, units=1, name="rackmount", network=1, power=1, cliplock=4):
 		RackElement.__init__(self, units, name, network, power, cliplock)
 
 	def visit(self, visitor):
 		visitor.visitRackmount(self)
+
+class APC(RackElement):
+	def __init__(self, units=1, name="APC", network=1, power=1, cliplock=4):
+		RackElement.__init__(self, units, name, network, power, cliplock)
+
+	def visit(self, visitor):
+		visitor.visitAPC(self)
 
 class PatchPanel(RackElement):
 	def __init__(self, units=1, name = "patch panel", network=0, power=0, cliplock=4):

@@ -212,6 +212,11 @@ class RackView:
 				self.visitEmptyRackElement()
 		elif isinstance(element, rack.Gap):
 			self.visitEmptyRackElement()
+		elif isinstance(element, rack.APC):
+			if 'noapc' not in self.options:
+				self.visitAPC(element)
+			else:
+				self.visitEmptyRackElement()
 		elif isinstance(element, rack.Shelf):
 			if 'noshelf' not in self.options:
 				self.visitShelfArea(element)
@@ -260,6 +265,12 @@ class RackView:
 		@param panel the patchpanel element
 		"""
 		self.visitRackmount(panel)
+
+	def visitAPC(self, apc):
+		"""
+		@param apc: the APC master switch
+		"""
+		self.visitRackmount(apc)
 
 	def visitGap(self, gap):
 		self.visitEmptyRackElement(self)
