@@ -24,7 +24,7 @@ class RackView:
 		"""
 
 		self.ps.translate(36, 36)
-		#self.ps.scale(0.3, 0.3)
+		self.ps.scale(0.3, 0.3)
 
 		# set the font we're using for the whole picture
 		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
@@ -74,6 +74,16 @@ class RackView:
 		self.ps.moveto(rackwidth, 0)
 		self.ps.lineto(rackwidth, rackheight)
 		self.ps.stroke()
+		self.ps.grestore()
+
+		# rack label
+		self.ps.gsave()
+		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
+		self.ps.scalefont(50)
+		self.ps.setfont()
+		self.ps.newpath()
+		self.ps.moveto(5, rackheight + 15)
+		self.ps.show("(%s)" % (rack._name,))
 		self.ps.grestore()
 				 
 		for y in range(0, rack._units):
@@ -291,7 +301,7 @@ class RackView:
 		self.ps.show("(%s)" % (element._name,))
 
 if __name__ == '__main__':
-	r = rack.Rack('rack', 47)
+	r = rack.Rack('rack asdfg', 47)
 	sa = rack.Shelf2U(6)
 	r.addElement(1, sa)
 	r.addElement(8, rack.Rackmount(1, "rackmount 1"))
