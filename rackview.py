@@ -28,14 +28,6 @@ class RackView:
 		@param thing the rack or racks to be drawn
 		"""
 
-		# draw background
-		self._top.appendChild(self._image.createComment("background"))
-		bg = self._image.createElement("rect")
-		self._top.appendChild(bg)
-		bg.setAttribute("style", "fill:white;")
-		bg.setAttribute("x", "0")
-		bg.setAttribute("y", "0")
-
 		if isinstance(thing, rack.Rack):
 			self._top.appendChild(self._image.createComment("rack"))
 			r = self.visitRack(thing)
@@ -56,16 +48,13 @@ class RackView:
 		w = float(r.getAttribute("width"))
 		h = float(r.getAttribute("height"))
 
-		bg.setAttribute("width", "%s" % (w,))
-		bg.setAttribute("height", "%s" % (h,))
-
 		self._top.setAttribute("viewBox", "0 0 %s %s" % (w, h))
 
-		#self._top.setAttribute("width", "%spx" % (w,))
-		#self._top.setAttribute("height", "%spx" % (h,))
+		self._top.setAttribute("width", "%spx" % (w,))
+		self._top.setAttribute("height", "%spx" % (h,))
 
-		self._top.setAttribute("width", "1010px")
-		self._top.setAttribute("height", "650px")
+		#self._top.setAttribute("width", "1010px")
+		#self._top.setAttribute("height", "650px")
 
 		return self._image.toxml()
 
@@ -120,11 +109,21 @@ class RackView:
 		# draw the outline of the rack
 		rect = self._image.createElement("rect")
 		r.appendChild(rect)
-		rect.setAttribute("x", "0")
+		rect.setAttribute("x", "-15")
 		rect.setAttribute("y", "50")
-		rect.setAttribute("width", "%s" % (self._rackwidth,))
+		rect.setAttribute("width", "%s" % (self._rackwidth + 30))
 		rect.setAttribute("height", "%s" % (self._rackheight,))
 		rect.setAttribute("style", "fill:none;stroke:#777;")
+
+		path = self._image.createElement("path")
+		r.appendChild(path)
+		path.setAttribute("d", "M 0 50 L 0 %s" % (self._rackheight,))
+		path.setAttribute("style", "fill:none;stroke:#777;")
+
+		path = self._image.createElement("path")
+		r.appendChild(path)
+		path.setAttribute("d", "M %s 50 L %s %s" % (self._rackwidth, self._rackwidth, self._rackheight,))
+		path.setAttribute("style", "fill:none;stroke:#777;")
 
 		for y in range(0, rack._units):
 			if rack._elements.has_key(y):
