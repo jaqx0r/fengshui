@@ -255,6 +255,22 @@ class ShelfElement(object):
 
 	width = property(_get_width, _set_width)
 
+	def _get_network(self):
+		return self.__network
+
+	def _set_network(self, value):
+		self.__network = int(value)
+	
+	network = property(_get_network, _set_network)
+
+	def _get_power(self):
+		return self.__power
+
+	def _set_power(self, value):
+		self.__power = int(value)
+	
+	power = property(_get_power, _set_power)
+
 class Box(ShelfElement):
 	def __init__(self, height=0, width=0, name = "box", network=1, power=1, cliplock=0):
 		ShelfElement.__init__(self, height, width, name, network, power, cliplock)
