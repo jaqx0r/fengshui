@@ -102,7 +102,7 @@ class RackView:
 		
 		# render the height bar on the left side of the rack
 		self.ps.gsave()
-		self.ps.setgray(0.5)
+		self.ps.setgray(0.6)
 		# reset frame of reference
 		self.ps.translate(-bracketwidth-barwidth, 0)
 		
@@ -120,7 +120,7 @@ class RackView:
 		self.ps.lineto(30, element._units * unitsize)
 		self.ps.stroke()
 		# size label
-		self.ps.setgray(0.5)
+		self.ps.setgray(0.6)
 		self.ps.newpath()
 		self.ps.moveto(5, element._units * unitsize / 2 - 7)
 		self.ps.show("(%s)" % (element._units,))
@@ -129,7 +129,7 @@ class RackView:
 		# draw rack unit position on the right hand side
 		self.ps.gsave()
 		self.ps.translate(rackwidth + bracketwidth, 0)
-		self.ps.setgray(0.5)
+		self.ps.setgray(0.55)
 		self.ps.newpath()
 		self.ps.moveto(5, 5)
 		self.ps.show("(%s)" % (pos,))
@@ -160,7 +160,7 @@ class RackView:
 
 	def visitEmptyRackElement(self):
 		e = 5
-		self.ps.setgray(0.75)
+		self.ps.setgray(0.85)
 		self.ps.newpath()
 		self.ps.moveto(e, e)
 		self.ps.lineto(e, unitsize - e)
@@ -204,12 +204,7 @@ class RackView:
 		@param shelf the shelf element
 		"""
 
-		self.ps.newpath()
-		self.ps.moveto(0, 0)
-		self.ps.lineto(rackwidth, 0)
-		self.ps.lineto(rackwidth, unitsize * shelf._units)
-		self.ps.lineto(0, unitsize * shelf._units)
-		self.ps.closepath()
+		self.visitShelf(shelf)
 
 		x = 0
 		for e in shelf._elements:
@@ -225,12 +220,51 @@ class RackView:
 			self.ps.grestore()
 
 	def visitShelf(self, shelf):
-		pass
+		"""
+		Draw the shelf shape
+		"""
+
+		rad = 5
+		bh = shelf._bracketunits * unitsize
+		
+		self.ps.setgray(0.5)
+		self.ps.newpath()
+		# start at the baseline which is relative to the bottom of the rack
+		# unit
+		self.ps.moveto(0, shelf._baseline)
+		# move up to the top of the mounting bracket
+		self.ps.lineto(0, bh)
+		# move across to start the arc
+		self.ps.lineto(-bracketwidth + rad, bh)
+		# top left arc
+		self.ps.arc(-bracketwidth + rad, bh - rad, rad, 90, 180)
+		# left side gets drawn by magic
+		# bottom left arc
+		self.ps.arc(-bracketwidth + rad, rad, rad, 180, 270)
+		# bottom edge of bracket
+		self.ps.lineto(0, 0)
+		# now to bottom line of actual shelf
+		self.ps.lineto(0, shelf._bottomline)
+		# across to other side of rack
+		self.ps.lineto(rackwidth, shelf._bottomline)
+		# to bottom of rack unit
+		self.ps.lineto(rackwidth, 0)
+		# now inverse of left side
+		self.ps.arc(rackwidth + bracketwidth - rad, rad, rad, 270, 0)
+		# right side for free
+		# top right arc
+		self.ps.arc(rackwidth + bracketwidth - rad, bh - rad, rad, 0, 90)
+		# close it off
+		self.ps.lineto(rackwidth, bh)
+		self.ps.lineto(rackwidth, shelf._baseline)
+		self.ps.closepath()
+		self.ps.fill()
 
 	def visitShelfElement(self, element):
 		"""
 		@param element the element to render
 		"""
+		self.ps.setgray(0)
 		self.ps.newpath()
 		self.ps.moveto(0, 0)
 		self.ps.lineto(element._width, 0)

@@ -12,6 +12,7 @@ class PostScript:
 		self.operators = ["moveto",
 						  "lineto",
 						  "rlineto",
+						  "arc",
 						  "newpath",
 						  "closepath",
 						  "stroke",
