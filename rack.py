@@ -9,19 +9,21 @@ class OutOfRackException:
 class Rack:
 	def __init__(self, name, units):
 		self._name = name
-		self._units = units
+		self.units = units
+
+		self._affinity = "bottom"
 
 		self._elements = {}
 
 	def addElement(self, position, element):
-		if position > self._units or position < 0:
+		if position > self.units or position < 0:
 			raise OutOfRackException
 		if self._elements.has_key(position):
 			raise OverlapException
 		self._elements[position] = element
-		if element._units > 1:
-			for i in range(position+1, position + element._units):
-				if i > self._units or i < 0:
+		if element.units > 1:
+			for i in range(position+1, position + element.units):
+				if i > self.units or i < 0:
 					raise OutOfRackException
 				if self._elements.has_key(i):
 					raise OverlapException
@@ -39,9 +41,33 @@ class Rack:
 
 	network = property(_get_network)
 
+	def _get_units(self):
+		return self._units
+
+	def _set_units(self, value):
+		self._units = int(value)
+
+	units = property(_get_units, _set_units)
+		
+
+	def __add__(self, o):
+		if self._affinity == "bottom":
+			r = range(0, self.units)
+		else:
+			r = range(self.units, 0)
+
+		for pos in r:
+			try:
+				self.addElement(pos, o)
+				break
+			except OverlapException:
+				pass
+			except OutOfRackException:
+				pass
+
 class RackElement:
-	def __init__(self, units, name = "rack element", network=1, power=1, cliplock=4):
-		self._units = units
+	def __init__(self, units=1, name="rack element", network=1, power=1, cliplock=4):
+		self.units = units
 		self._name = name
 		self.network = network
 		self.power = power
@@ -50,29 +76,37 @@ class RackElement:
 	def visit(self, visitor):
 		visitor.visitRackElement(self)
 
+	def _get_units(self):
+		return self._units
+
+	def _set_units(self, value):
+		self._units = int(value)
+
+	units = property(_get_units, _set_units)
+
 class Rackmount(RackElement):
-	def __init__(self, units, name = "rackmount", network=1, power=1, cliplock= 1):
+	def __init__(self, units=1, name="rackmount", network=1, power=1, cliplock=1):
 		RackElement.__init__(self, units, name, network, power, cliplock)
 
 	def visit(self, visitor):
 		visitor.visitRackmount(self)
 
 class PatchPanel(RackElement):
-	def __init__(self, units, name = "patch panel", network=0, power=0, cliplock=4):
+	def __init__(self, units=1, name = "patch panel", network=0, power=0, cliplock=4):
 		RackElement.__init__(self, units, name, network, power, cliplock)
 
 	def visit(self, visitor):
 		visitor.visitPatchPanel(self)
 
 class CableManagement(RackElement):
-	def __init__(self, units, name = "cable management", network=0, power=0, cliplock=4):
+	def __init__(self, units=1, name = "cable management", network=0, power=0, cliplock=4):
 		RackElement.__init__(self, units, name, network, power, cliplock)
 
 	def visit(self, visitor):
 		visitor.visitCableManagement(self)
 
 class Shelf(RackElement):
-	def __init__(self, units, name = "shelf", network=0, power=0, cliplock=4):
+	def __init__(self, units=1, name = "shelf", network=0, power=0, cliplock=4):
 		RackElement.__init__(self, units, name, network, power, cliplock)
 
 		self._elements = []
@@ -94,8 +128,11 @@ class Shelf(RackElement):
 
 	network = property(_get_network)
 
+	def __add__(self, o):
+		self._elements.append(o)
+
 class Shelf1RU(Shelf):
-	def __init__(self, units, name = "1RU shelf", network=0, power=0, cliplock=4):
+	def __init__(self, units=1, name = "1RU shelf", network=0, power=0, cliplock=4):
 		Shelf.__init__(self, units, name, network, power, cliplock)
 		self._baseline = 35
 		self._bottomline = 10
@@ -105,7 +142,7 @@ class Shelf1RU(Shelf):
 		visitor.visitShelf1RU(self)
 
 class Shelf2U(Shelf):
-	def __init__(self, units, name = "thin shelf w/ 30kg rating", network=0, power=0, cliplock=0):
+	def __init__(self, units=2, name = "thin shelf w/ 30kg rating", network=0, power=0, cliplock=0):
 		Shelf.__init__(self, units, name, network, power, cliplock)
 		self._baseline = 0
 		self._bottomline = -15
@@ -114,10 +151,10 @@ class Shelf2U(Shelf):
 	def visit(self, visitor):
 		visitor.visitShelf2U(self)
 
-class ShelfElement:
-	def __init__(self, height, width, name = "shelf element", network=1, power=1, cliplock=0):
-		self._width = width
-		self._height = height
+class ShelfElement(object):
+	def __init__(self, height=0, width=0, name="shelf element", network=1, power=1, cliplock=0):
+		self.width = width
+		self.height = height
 		self._name = name
 		self.network = network
 		self.power = power
@@ -126,8 +163,24 @@ class ShelfElement:
 	def visit(self, visitor):
 		visitor.visitShelfElement(self)
 
+	def _get_height(self):
+		return self.__height
+
+	def _set_height(self, value):
+		self.__height = float(value)
+
+	height = property(_get_height, _set_height)
+
+	def _get_width(self):
+		return self.__width
+
+	def _set_width(self, value):
+		self.__width = float(value)
+
+	width = property(_get_width, _set_width)
+
 class Box(ShelfElement):
-	def __init__(self, height, width, name = "box", network=1, power=1, cliplock=0):
+	def __init__(self, height=0, width=0, name = "box", network=1, power=1, cliplock=0):
 		ShelfElement.__init__(self, height, width, name, network, power, cliplock)
 
 	def visit(self, visitor):

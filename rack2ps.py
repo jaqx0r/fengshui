@@ -92,7 +92,7 @@ class RackView:
 		self.ps.show("(%s)" % (rack._name,))
 		self.ps.grestore()
 				 
-		for y in range(0, rack._units):
+		for y in range(0, rack.units):
 			self.ps.gsave()
 			self.ps.translate(0, y * unitsize)
 
@@ -124,7 +124,7 @@ class RackView:
 		
 		self.ps.newpath()
 		self.ps.moveto(20, 0)
-		self.ps.lineto(20, element._units * unitsize)
+		self.ps.lineto(20, element.units * unitsize)
 		self.ps.stroke()
 		# top and bottom edges
 		self.ps.newpath()
@@ -132,8 +132,8 @@ class RackView:
 		self.ps.lineto(30, 0)
 		self.ps.stroke()
 		self.ps.newpath()
-		self.ps.moveto(10, element._units * unitsize)
-		self.ps.lineto(30, element._units * unitsize)
+		self.ps.moveto(10, element.units * unitsize)
+		self.ps.lineto(30, element.units * unitsize)
 		self.ps.stroke()
 		# arrowheads
 		self.ps.newpath()
@@ -142,15 +142,15 @@ class RackView:
 		self.ps.lineto(25, 10)
 		self.ps.stroke()
 		self.ps.newpath()
-		self.ps.moveto(15, element._units * unitsize - 10)
-		self.ps.lineto(20, element._units * unitsize)
-		self.ps.lineto(25, element._units * unitsize - 10)
+		self.ps.moveto(15, element.units * unitsize - 10)
+		self.ps.lineto(20, element.units * unitsize)
+		self.ps.lineto(25, element.units * unitsize - 10)
 		self.ps.stroke()
 		# size label
 		self.ps.setgray(0.5)
 		self.ps.newpath()
-		self.ps.moveto(5, element._units * unitsize / 2 - 7)
-		self.ps.show("(%s)" % (element._units,))
+		self.ps.moveto(5, element.units * unitsize / 2 - 7)
+		self.ps.show("(%s)" % (element.units,))
 		self.ps.grestore()
 
 		# draw rack unit position on the right hand side
@@ -181,7 +181,7 @@ class RackView:
 			if 'noshelf' not in self.options:
 				self.visitShelfArea(element)
 			else:
-				for i in range(pos, pos + element._units):
+				for i in range(pos, pos + element.units):
 					_ = i
 					self.visitEmptyRackElement()
 
@@ -208,15 +208,15 @@ class RackView:
 		self.ps.newpath()
 		self.ps.moveto(0, 0)
 		self.ps.lineto(rackwidth, 0)
-		self.ps.lineto(rackwidth, element._units * unitsize)
-		self.ps.lineto(0, element._units * unitsize)
+		self.ps.lineto(rackwidth, element.units * unitsize)
+		self.ps.lineto(0, element.units * unitsize)
 		self.ps.closepath()
 		self.ps.stroke()
 
 		# label
 		self.ps.newpath()
-		self.ps.moveto(5, element._units * unitsize - 14 - 5)
-		self.ps.show("(%s)" % (element._name,))
+		self.ps.moveto(5, element.units * unitsize - 14 - 5)
+		self.ps.show("(%s)" % (element.name,))
 		
 		self.ps.grestore()
 
@@ -239,10 +239,10 @@ class RackView:
 			# don't sit on top of each other
 			self.ps.gsave()
 			self.ps.translate(x, shelf._baseline)
-			
+
 			self.visitShelfElement(e)
 
-			x += e._width
+			x += e.width
 
 			self.ps.grestore()
 
@@ -292,18 +292,19 @@ class RackView:
 		"""
 		@param element the element to render
 		"""
+
 		self.ps.setgray(0)
 		self.ps.newpath()
 		self.ps.moveto(0, 0)
-		self.ps.lineto(element._width, 0)
-		self.ps.lineto(element._width, element._height)
-		self.ps.lineto(0, element._height)
+		self.ps.lineto(element.width, 0)
+		self.ps.lineto(element.width, element.height)
+		self.ps.lineto(0, element.height)
 		self.ps.closepath()
 		self.ps.stroke()
 
 		# draw label
 		self.ps.newpath()
-		self.ps.moveto(5, element._height - 14 - 5)
+		self.ps.moveto(5, element.height - 14 - 5)
 		self.ps.show("(%s)" % (element._name,))
 
 	def visitCableManagement(self, cman):
@@ -318,8 +319,8 @@ class RackView:
 		self.ps.newpath()
 		self.ps.moveto(0, 0)
 		self.ps.lineto(rackwidth, 0)
-		self.ps.lineto(rackwidth, cman._units * unitsize)
-		self.ps.lineto(0, cman._units * unitsize)
+		self.ps.lineto(rackwidth, cman.units * unitsize)
+		self.ps.lineto(0, cman.units * unitsize)
 		self.ps.closepath()
 		self.ps.stroke()
 
@@ -328,18 +329,20 @@ class RackView:
 			for x in [x * rackwidth / 16.0 for x in [3, 8, 13]]:
 				self.ps.gsave()
 				self.ps.setgray(black)
-				
+
+				self.ps.newpath()
 				self.ps.moveto(x - 5, 0)
-				self.ps.lineto(x - 5, cman._units * unitsize / 2 - 5)
-				self.ps.lineto(x + 5, cman._units * unitsize / 2 - 5)
+				self.ps.lineto(x - 5, cman.units * unitsize / 2 - 5)
+				self.ps.lineto(x + 5, cman.units * unitsize / 2 - 5)
 				self.ps.lineto(x + 5, 0)
 				self.ps.closepath()
 				fill()
 
-				self.ps.moveto(x - 5, cman._units * unitsize)
-				self.ps.lineto(x - 5, cman._units * unitsize / 2 + 5)
-				self.ps.lineto(x + 5, cman._units * unitsize / 2 + 5)
-				self.ps.lineto(x + 5, cman._units * unitsize)
+				self.ps.newpath()
+				self.ps.moveto(x - 5, cman.units * unitsize)
+				self.ps.lineto(x - 5, cman.units * unitsize / 2 + 5)
+				self.ps.lineto(x + 5, cman.units * unitsize / 2 + 5)
+				self.ps.lineto(x + 5, cman.units * unitsize)
 				self.ps.closepath()
 				fill()
 			
