@@ -197,7 +197,7 @@ class RackView:
 		"""
 		@param panel the patchpanel element
 		"""
-		pass
+		self.visitRackmount(panel)
 
 	def visitShelfArea(self, shelf):
 		"""
@@ -234,4 +234,6 @@ if __name__ == '__main__':
 	r.addElement(1, sa)
 	r.addElement(8, rack.Rackmount(1, "rackmount 1"))
 	r.addElement(10, rack.Rackmount(2, "rackmount 2"))
+
+	r.addElement(13, rack.PatchPanel(1, "12p patch panel"))
 	print RackView().render(r)
