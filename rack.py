@@ -30,38 +30,50 @@ class Rack:
 	def visit(self, visitor):
 		visitor.visitRack(self)
 
+	def _get_network(self):
+		ports = 0
+		for e in self._elements.keys():
+			if self._elements[e] is not None:
+				ports += self._elements[e].network
+		return ports
+
+	network = property(_get_network)
+
 class RackElement:
-	def __init__(self, units, name = "rack element"):
+	def __init__(self, units, name = "rack element", network=1, power=1, cliplock=4):
 		self._units = units
 		self._name = name
+		self.network = network
+		self.power = power
+		self.cliplock = cliplock
 
 	def visit(self, visitor):
 		visitor.visitRackElement(self)
 
 class Rackmount(RackElement):
-	def __init__(self, units, name = "rackmount"):
-		RackElement.__init__(self, units, name)
+	def __init__(self, units, name = "rackmount", network=1, power=1, cliplock= 1):
+		RackElement.__init__(self, units, name, network, power, cliplock)
 
 	def visit(self, visitor):
 		visitor.visitRackmount(self)
 
 class PatchPanel(RackElement):
-	def __init__(self, units, name = "patch panel"):
-		RackElement.__init__(self, units, name)
+	def __init__(self, units, name = "patch panel", network=0, power=0, cliplock=4):
+		RackElement.__init__(self, units, name, network, power, cliplock)
 
 	def visit(self, visitor):
 		visitor.visitPatchPanel(self)
 
 class CableManagement(RackElement):
-	def __init__(self, units, name = "cable management"):
-		RackElement.__init__(self, units, name)
+	def __init__(self, units, name = "cable management", network=0, power=0, cliplock=4):
+		RackElement.__init__(self, units, name, network, power, cliplock)
 
 	def visit(self, visitor):
 		visitor.visitCableManagement(self)
 
 class Shelf(RackElement):
-	def __init__(self, units, name = "shelf"):
-		RackElement.__init__(self, units, name)
+	def __init__(self, units, name = "shelf", network=0, power=0, cliplock=4):
+		RackElement.__init__(self, units, name, network, power, cliplock)
 
 		self._elements = []
 		self._baseline = 45
@@ -74,9 +86,17 @@ class Shelf(RackElement):
 	def visit(self, visitor):
 		visitor.visitShelf(self)
 
+	def _get_network(self):
+		ports = self.network
+		for e in self._elements:
+			ports += e.network
+		return ports
+
+	network = property(_get_network)
+
 class Shelf1RU(Shelf):
-	def __init__(self, units, name = "1RU shelf"):
-		Shelf.__init__(self, units, name)
+	def __init__(self, units, name = "1RU shelf", network=0, power=0, cliplock=4):
+		Shelf.__init__(self, units, name, network, power, cliplock)
 		self._baseline = 35
 		self._bottomline = 10
 		self._bracketunits = 1
@@ -85,8 +105,8 @@ class Shelf1RU(Shelf):
 		visitor.visitShelf1RU(self)
 
 class Shelf2U(Shelf):
-	def __init__(self, units, name = "thin shelf w/ 30kg rating"):
-		Shelf.__init__(self, units, name)
+	def __init__(self, units, name = "thin shelf w/ 30kg rating", network=0, power=0, cliplock=0):
+		Shelf.__init__(self, units, name, network, power, cliplock)
 		self._baseline = 0
 		self._bottomline = -15
 		self._bracketunits = 2
@@ -95,17 +115,20 @@ class Shelf2U(Shelf):
 		visitor.visitShelf2U(self)
 
 class ShelfElement:
-	def __init__(self, height, width, name = "shelf element"):
+	def __init__(self, height, width, name = "shelf element", network=1, power=1, cliplock=0):
 		self._width = width
 		self._height = height
 		self._name = name
+		self.network = network
+		self.power = power
+		self.cliplock = cliplock
 
 	def visit(self, visitor):
 		visitor.visitShelfElement(self)
 
 class Box(ShelfElement):
-	def __init__(self, height, width, name = "box"):
-		ShelfElement.__init__(self, height, width, name)
+	def __init__(self, height, width, name = "box", network=1, power=1, cliplock=0):
+		ShelfElement.__init__(self, height, width, name, network, power, cliplock)
 
 	def visit(self, visitor):
 		visitor.visitBox(self)
