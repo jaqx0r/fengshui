@@ -68,3 +68,10 @@ class ShelfElement:
 class Box(ShelfElement):
 	def __init__(self, height, width, name = "box"):
 		ShelfElement.__init__(self, height, width, name)
+
+class RackArray:
+	def __init__(self):
+		self._elements = []
+		
+	def addElement(self, rack):
+		self._elements.append(rack)
