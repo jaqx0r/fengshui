@@ -57,11 +57,11 @@ class Shelf2U(Shelf):
 		self._bottomline = -15
 
 class ShelfElement:
-	def __init__(self, width, height, name = "shelf element"):
+	def __init__(self, height, width, name = "shelf element"):
 		self._width = width
 		self._height = height
 		self._name = name
 
 class Box(ShelfElement):
-	def __init__(self, width, height, name = "box"):
-		ShelfElement.__init__(self, width, height, name)
+	def __init__(self, height, width, name = "box"):
+		ShelfElement.__init__(self, height, width, name)

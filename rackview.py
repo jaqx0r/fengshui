@@ -6,14 +6,14 @@ import rack
 class RackView:
 	def __init__(self):
 		# 47 rack units
-		self._unitsize = 43
+		self._unitsize = 43.5
 		self._rackheight = self._unitsize * 47
 		self._rackwidth = 445
 
-		self._imgheight = 2000
+		self._imgheight = self._rackheight
 		self._imgwidth = self._imgheight * self._rackwidth / self._rackheight
 
-		self._xpadding = 60
+		self._xpadding = 100
 		self._ypadding = 25
 
 		self._image = xml.dom.minidom.parseString("<svg/>")
@@ -119,19 +119,19 @@ class RackView:
 			# upper horz line
 			p1 = self._image.createElement("path")
 			measure.appendChild(p1)
-			p1.setAttribute("d", "M -30 0 -10 0")
+			p1.setAttribute("d", "M -60 0 -40 0")
 			# lower horz line
 			p2 = self._image.createElement("path")
 			measure.appendChild(p2)
-			p2.setAttribute("d", "M -30 %s -10 %s" % (self._unitsize * element._units, self._unitsize * element._units))
+			p2.setAttribute("d", "M -60 %s -40 %s" % (self._unitsize * element._units, self._unitsize * element._units))
 			# connecting line
 			p3 = self._image.createElement("path")
 			measure.appendChild(p3)
-			p3.setAttribute("d", "M -20 0 -20 %s" % (self._unitsize * element._units,))
+			p3.setAttribute("d", "M -50 0 -50 %s" % (self._unitsize * element._units,))
 			# unit size label
 			label = self._image.createElement("text")
 			measure.appendChild(label)
-			label.setAttribute("x", "-25")
+			label.setAttribute("x", "-55")
 			label.setAttribute("y", "%s" % (self._unitsize * element._units / 2.0 + self._unitsize * 0.25,))
 			label.setAttribute("style", "fill:black;stroke:none;text-anchor:right;font-size:36pt;")
 			label.appendChild(self._image.createTextNode("%s" % (element._units,)))
@@ -139,7 +139,7 @@ class RackView:
 			# draw a position label right side of the rack
 			label = self._image.createElement("text")
 			re.appendChild(label)
-			label.setAttribute("x", "%s" % (self._rackwidth + 10,))
+			label.setAttribute("x", "%s" % (self._rackwidth + 40,))
 			label.setAttribute("y", "%s" % (self._unitsize * element._units - 10,))
 			label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-size:%spx;" % (self._unitsize * 0.5,))
 			label.appendChild(self._image.createTextNode("%s" % (pos,)))
@@ -247,8 +247,6 @@ class RackView:
 		title.appendChild(self._image.createTextNode("Shelf area"))
 		e.appendChild(title)
 
-		e.setAttribute("style", "fill:none;stroke:black;")
-
 		rect = self._image.createElement("rect")
 		e.appendChild(rect)
 
@@ -256,6 +254,7 @@ class RackView:
 		rect.setAttribute("y", "0")
 		rect.setAttribute("height", "%s" % (self._unitsize * shelf._units,))
 		rect.setAttribute("width", "%s" % (self._rackwidth,))
+		rect.setAttribute("style", "fill:none;stroke:none;")
 
 		if isinstance(shelf, rack.Shelf1RU):
 			s = self.visitShelf1RU(shelf)
@@ -294,11 +293,11 @@ class RackView:
 		e.setAttribute("style", "fill:black;stroke:black;")
 
 		# the rackline indicates the top of the rack unit
-		rackline = self._image.createElement("path")
-		e.appendChild(rackline)
+# 		rackline = self._image.createElement("path")
+# 		e.appendChild(rackline)
 
-		rackline.setAttribute("style", "stroke:#EEE;")
-		rackline.setAttribute("d", "M 0 0 %s 0" % (self._rackwidth,))
+# 		rackline.setAttribute("style", "stroke:#EEE;")
+# 		rackline.setAttribute("d", "M 0 0 %s 0" % (self._rackwidth,))
 
 		baseline = self._image.createElement("path")
 		e.appendChild(baseline)
@@ -332,15 +331,38 @@ class RackView:
 
 		e.setAttribute("style", "fill:black;stroke:black;")
 
-		baseline = self._image.createElement("path")
-		e.appendChild(baseline)
+		# draw the shelf
+		sh = self._image.createElement("path")
+		e.appendChild(sh)
+		sh.setAttribute("d", "M %s %s %s %s %s %s %s %s" %
+						(0, self._unitsize,
+						 self._rackwidth, self._unitsize,
+						 self._rackwidth, self._unitsize - shelf._bottomline,
+						 0, self._unitsize - shelf._bottomline))
+		sh.setAttribute("style", "fill:#CCC;stroke:black;")
 
-		baseline.setAttribute("d", "M 0 %s %s %s" % (self._unitsize - shelf._baseline, self._rackwidth, self._unitsize - shelf._baseline))
+		# draw the mounting brackets
+		leftb = self._image.createElement("path")
+		e.appendChild(leftb)
+		leftb.setAttribute("d", "M %s %s %s %s %s %s %s %s %s %s %s %s" %
+						   (0, self._unitsize,
+							0, self._unitsize - self._unitsize * 2,
+							-self._unitsize / 2.0, self._unitsize - self._unitsize * 2,
+							-self._unitsize / 2.0, self._unitsize,
+							0, self._unitsize,
+							0, self._unitsize - shelf._bottomline))
+		leftb.setAttribute("style", "fill:#CCC;stroke:black;")
 
-		bottomline = self._image.createElement("path")
-		e.appendChild(bottomline)
-
-		bottomline.setAttribute("d", "M 0 %s %s %s" % (self._unitsize - shelf._bottomline, self._rackwidth, self._unitsize - shelf._bottomline))
+		rb = self._image.createElement("path")
+		e.appendChild(rb)
+		rb.setAttribute("d", "M %s %s %s %s %s %s %s %s %s %s %s %s" %
+						(self._rackwidth, self._unitsize,
+						 self._rackwidth, self._unitsize - self._unitsize * 2,
+						 self._rackwidth + self._unitsize / 2.0, self._unitsize - self._unitsize * 2,
+						 self._rackwidth + self._unitsize / 2.0, self._unitsize,
+						 self._rackwidth, self._unitsize,
+						 self._rackwidth, self._unitsize - shelf._bottomline))
+		rb.setAttribute("style", "fill:#CCC;stroke:black;")
 
 		# add a label
 		label = self._image.createElement("text")
