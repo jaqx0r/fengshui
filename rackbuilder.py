@@ -11,6 +11,22 @@ class RackBuilder:
 	def build(self, ast):
 		return ast.visit(self, None)
 
+	def visitRackArray(self, ast, obj):
+		ra = rack.RackArray()
+		
+		return ast.racklist.visit(self, ra)
+
+	def visitRackList(self, ast, obj):
+		rack = ast.rack.visit(self, None)
+		obj.addElement(rack)
+
+		ast.racklist.visit(self, obj)
+
+		return obj
+
+	def visitEmptyRackList(self, ast, obj):
+		pass
+
 	def visitRack(self, ast, obj):
 		name = ast.name.visit(self, obj)
 		r = rack.Rack(name, 47)

@@ -8,10 +8,9 @@ import string
 
 class Scanner:
 	def __init__(self, sourcefile):
-		self.filestack = 0
-		self.sourcefile = []
-		self.sourcefile.append(sourcefile)
-		self.currentchar = self.sourcefile[self.filestack].getNextChar()
+		self.include = None
+		self.sourcefile = sourcefile
+		self.currentchar = self.sourcefile.getNextChar()
 		self.tokeninspected = None
 		self.charpos = 1
 		self.linepos = 1
@@ -23,9 +22,9 @@ class Scanner:
 		currentchar = self.currentchar
 		charpos = self.charpos
 		linepos = self.linepos
-		self.sourcefile[self.filestack].mark()
+		self.sourcefile.mark()
 		self.tokeninspected = self.getToken()
-		self.sourcefile[self.filestack].reset()
+		self.sourcefile.reset()
 		self.linepos = linepos
 		self.charpos = charpos
 		self.currentchar = currentchar
@@ -44,10 +43,10 @@ class Scanner:
 			self.charpos = ((self.charpos / 8) + 1) * 8 + 1
 		else:
 			self.charpos += 1
-		self.currentchar = self.sourcefile[self.filestack].getNextChar()
+		self.currentchar = self.sourcefile.getNextChar()
 
 	def inspectChar(self, nthchar):
-		return self.sourcefile[self.filestack].inspectChar(nthchar)
+		return self.sourcefile.inspectChar(nthchar)
 
 	def nextToken(self):
 		r = None
@@ -112,6 +111,13 @@ class Scanner:
 			pass
 
 	def getToken(self):
+		if self.include:
+			tok = self.include.getToken()
+			if tok.kind == Token.EOF:
+				self.include = None
+			else:
+				return tok
+		
 		if self.tokeninspected != None:
 			tok = self.tokeninspected
 			self.tokeninspected = None
@@ -120,8 +126,18 @@ class Scanner:
 		self.currentspelling = ""
 		self.sourceposition = SourcePosition(self.linepos, self.linepos, self.charpos, self.charpos)
 		kind = self.nextToken()
-		#print self.currentspelling + "$"
+			
 		tok = Token(kind, self.currentspelling, self.sourceposition)
+		
+		#print self.currentspelling + "$"
+		
+		# include files
+		if tok.kind == Token.INCLUDE:
+			kind = self.getToken()
+			#print self.currentspelling + "%"
+			self.include = Scanner(SourceFile(self.currentspelling))
+			tok = self.include.getToken()
+
 		return tok
 
 if __name__ == '__main__':

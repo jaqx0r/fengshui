@@ -8,11 +8,13 @@ class Token:
 	RCURLY = 5
 	LSQUARE = 6
 	RSQUARE = 7
+	RACKARRAY = 8
 	EQUALS = 9
 	COMMA = 10
 	SEMICOLON = 11
 	STRINGLITERAL = 12
 	EOF = 13
+	INCLUDE = 14
 	
 	keywords = {
 		'id': ID,
@@ -22,10 +24,12 @@ class Token:
 		'rcurly': RCURLY,
 		'lsquare': LSQUARE,
 		'rsquare': RSQUARE,
+		'rackarray': RACKARRAY,
 		'equals': EQUALS,
 		'comma': COMMA,
 		'semicolon': SEMICOLON,
-		'eof': EOF
+		'eof': EOF,
+		'include': INCLUDE
 		}
 
 	def __init__(self, kind, spelling, sourceposition):

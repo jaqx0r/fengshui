@@ -33,7 +33,45 @@ class Parser:
 		position.charfinish = self.currenttoken.sourceposition.charfinish
 
 	def parse(self):
-		return self.parseRack()
+		if self.currenttoken.kind == Token.RACKARRAY:
+			r = self.parseRackArray()
+		elif self.currenttoken.kind == Token.RACK:
+			r = self.parseRack()
+		else:
+			raise Exception
+		return r
+
+	def parseRackArray(self):
+		sp = SourcePosition()
+		self.start(sp)
+		
+		self.match(Token.RACKARRAY)
+		self.match(Token.LCURLY)
+
+		l = self.parseRackList()
+
+		self.match(Token.RCURLY)
+
+		self.finish(sp)
+		return RackArray(l, sp)
+
+	def parseRackList(self):
+		sp = SourcePosition()
+		self.start(sp)
+
+		if self.currenttoken.kind != Token.RCURLY:
+			if self.currenttoken.kind in (Token.RACK,):
+				r = self.parseRack()
+				l = self.parseRackList()
+				self.finish(sp)
+				rl = RackList(r, l, sp)
+			else:
+				print self.currenttoken.spelling
+				raise Exception
+		else:
+			self.finish(sp)
+			rl = EmptyRackList(sp)
+		return rl
 
 	def parseRack(self):
 		sp = SourcePosition()

@@ -16,9 +16,33 @@ class Rack(AST):
 	def visit(self, visitor, obj):
 		return visitor.visitRack(self, obj)
 
+class RackArray(AST):
+	def __init__(self, racklist, sourceposition):
+		AST.__init__(self, sourceposition)
+		self.racklist = racklist
+
+	def visit(self, visitor, obj):
+		return visitor.visitRackArray(self, obj)
+
 class List(AST):
 	def __init__(self, sourceposition):
 		AST.__init__(self, sourceposition)
+
+class RackList(List):
+	def __init__(self, rack, racklist, sourceposition):
+		AST.__init__(self, sourceposition)
+		self.rack = rack
+		self.racklist = racklist
+
+	def visit(self, visitor, obj):
+		return visitor.visitRackList(self, obj)
+
+class EmptyRackList(List):
+	def __init__(self, sourceposition):
+		List.__init__(self, sourceposition)
+
+	def visit(self, visitor, obj):
+		return visitor.visitEmptyRackList(self, obj)
 
 class ElemList(List):
 	def __init__(self, elem, elemlist, sourceposition):
