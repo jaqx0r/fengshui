@@ -119,3 +119,44 @@ class RackArray:
 
 	def visit(self, visitor):
 		visitor.visitRackArray(self)
+
+class RackVisitor:
+	"""Base class for visitors to inherit from"""
+	def __init__(self):
+		pass
+
+	def visit(self, ast):
+		pass
+
+	def visitRackArray(self, ast):
+		pass
+
+	def visitRack(self, ast):
+		pass
+
+	def visitRackElement(self, ast):
+		pass
+
+	def visitRackmount(self, ast):
+		pass
+
+	def visitPatchPanel(self, ast):
+		pass
+
+	def visitCableManagement(self, ast):
+		pass
+
+	def visitShelf(self, ast):
+		pass
+
+	def visitShelf1RU(self, ast):
+		pass
+
+	def visitShelf2U(self, ast):
+		pass
+
+	def visitShelfElement(self, ast):
+		pass
+
+	def visitBox(self, ast):
+		pass
