@@ -1,10 +1,4 @@
-%.png: %.svg
-	convert svg:$< png:$@
+%.ps: %.feng *.py
+	python rackbuilder.py $< > $@
 
-%.ps: %.svg
-	inkscape -z -f $< -p '> $@'
-
-#all: racks.png racks.ps
-
-racks.svg: $(wildcard *.py)
-	python anchor.py
+all: $(patsubst %.feng,%.ps,$(wildcard *.feng))

@@ -11,7 +11,7 @@ class Rack:
 		self._name = name
 		self.units = units
 
-		self._affinity = "bottom"
+		self.affinity = "bottom"
 
 		self._elements = {}
 
@@ -20,14 +20,17 @@ class Rack:
 			raise OutOfRackException
 		if self._elements.has_key(position):
 			raise OverlapException
-		self._elements[position] = element
 		if element.units > 1:
 			for i in range(position+1, position + element.units):
 				if i > self.units or i < 0:
 					raise OutOfRackException
 				if self._elements.has_key(i):
 					raise OverlapException
-				self._elements[i] = None
+
+		# all ok, place the element
+		self._elements[position] = element
+		for i in range(position + 1, position + element.units):
+			self._elements[i] = None
 
 	def visit(self, visitor):
 		visitor.visitRack(self)
@@ -48,28 +51,39 @@ class Rack:
 		self._units = int(value)
 
 	units = property(_get_units, _set_units)
-		
 
 	def __add__(self, o):
-		if self._affinity == "bottom":
-			r = range(0, self.units)
+		if self.affinity == "bottom":
+			r = range(0, self.units - o.units)
 		else:
-			r = range(self.units, 0)
+			r = range(self.units - o.units, 0, -1)
 
 		for pos in r:
-			try:
-				self.addElement(pos, o)
+			if not self._elements.has_key(pos):
+				try:
+					for i in range(pos+1, pos + o.units):
+						if self._elements.has_key(i):
+							raise OverlapException
+				except OverlapException:
+					continue
+				# all ok, place element
+				for i in range(pos+1, pos+o.units):
+					self._elements[i] = None
+				self._elements[pos] = o
 				break
-			except OverlapException:
-				pass
-			except OutOfRackException:
-				pass
 
-class RackElement:
+		if o not in self._elements.values():
+			raise Exception
+
+	def update(self, d):
+		#print d
+		self.__dict__.update(d)
+
+class RackElement(object):
 	def __init__(self, units=1, name="rack element", network=1, power=1, cliplock=4):
 		self.units = units
-		self._name = name
-		self.network = network
+		self.name = name
+		self.networkports = network
 		self.power = power
 		self.cliplock = cliplock
 

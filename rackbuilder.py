@@ -21,10 +21,10 @@ class RackBuilder:
 		return r
 
 	def visitElemList(self, ast, obj):
-		elem = ast.elem.visit(self, obj)
+		elem = ast.elem.visit(self, None)
 
 		if hasattr(elem, 'has_key'):
-			print "got dict for obj"
+			obj.update(elem)
 		else:
 			obj.__add__(elem)
 
@@ -42,7 +42,7 @@ class RackBuilder:
 		for e in s._elements:
 			if e.height > h:
 				h = e.height
-		s.units = 1 + int(math.ceil(h / 43.5))
+		s.units = int(math.ceil(h / 43.5))
 		return s
 
 	def visitIdentifier(self, ast, obj):
