@@ -120,7 +120,7 @@ class RackView:
 		self.ps.lineto(30, element._units * unitsize)
 		self.ps.stroke()
 		# size label
-		self.ps.setgray(0.6)
+		self.ps.setgray(0.5)
 		self.ps.newpath()
 		self.ps.moveto(5, element._units * unitsize / 2 - 7)
 		self.ps.show("(%s)" % (element._units,))
@@ -129,7 +129,7 @@ class RackView:
 		# draw rack unit position on the right hand side
 		self.ps.gsave()
 		self.ps.translate(rackwidth + bracketwidth, 0)
-		self.ps.setgray(0.55)
+		self.ps.setgray(0.5)
 		self.ps.newpath()
 		self.ps.moveto(5, 5)
 		self.ps.show("(%s)" % (pos,))
