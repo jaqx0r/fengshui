@@ -9,6 +9,7 @@ class PostScript:
 	def __init__(self):
 		self.o = []
 		self.indent = 0
+		self.page = 1
 		self.operators = ["moveto",
 						  "lineto",
 						  "rlineto",
@@ -28,12 +29,16 @@ class PostScript:
 						  "scale",
 						  "charpath",
 						  "setgray",
-						  "setlinewidth"
+						  "setlinewidth",
+						  "showpage"
 						  ]
 		self.prelude = ["%!",
-					   "%%Creator: FengShui"
+						"%%Creator: FengShui",
+						"%%EndComment",
+						"%%Page: 1",
 					   ]
 		self.trailer = ["showpage",
+						"%%Trailer:",
 						"%%EOF"
 						]
 						  
@@ -50,6 +55,12 @@ class PostScript:
 
 	def comment(self, comment):
 		self.append("%% %s" % (comment,))
+
+	def newpage(self):
+		self.showpage()
+		self.page += 1
+		self.append("%%Page: %s" % (self.page,))
+		
 
 	def render(self):
 		return string.join(self.prelude + self.o + self.trailer, '\n')
