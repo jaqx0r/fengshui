@@ -40,6 +40,10 @@ class PatchPanel(RackElement):
 	def __init__(self, units, name = "patch panel"):
 		RackElement.__init__(self, units, name)
 
+class CableManagement(RackElement):
+	def __init__(self, units, name = "cable management"):
+		RackElement.__init__(self, units, name)
+
 class Shelf(RackElement):
 	def __init__(self, units, name = "shelf"):
 		RackElement.__init__(self, units, name)

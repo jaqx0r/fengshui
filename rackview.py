@@ -164,6 +164,8 @@ class RackView:
 			re = self.visitRackmount(element)
 		elif isinstance(element, rack.PatchPanel):
 			re = self.visitPatchPanel(element)
+		elif isinstance(element, rack.CableManagement):
+			re = self.visitPatchPanel(element)
 		elif isinstance(element, rack.Shelf):
 			re = self.visitShelfArea(element)
 		else:
