@@ -211,8 +211,18 @@ class RackView:
 		self.ps.lineto(0, unitsize * shelf._units)
 		self.ps.closepath()
 
+		x = 0
 		for e in shelf._elements:
+			# put each shelf element on the shelf, and move across so they
+			# don't sit on top of each other
+			self.ps.gsave()
+			self.ps.translate(x, shelf._baseline)
+			
 			self.visitShelfElement(e)
+
+			x += e._width
+
+			self.ps.grestore()
 
 	def visitShelf(self, shelf):
 		pass
@@ -227,6 +237,12 @@ class RackView:
 		self.ps.lineto(element._width, element._height)
 		self.ps.lineto(0, element._height)
 		self.ps.closepath()
+		self.ps.stroke()
+
+		# draw label
+		self.ps.newpath()
+		self.ps.moveto(5, element._height - 14 - 5)
+		self.ps.show("(%s)" % (element._name,))
 
 if __name__ == '__main__':
 	r = rack.Rack('rack', 47)
@@ -236,4 +252,13 @@ if __name__ == '__main__':
 	r.addElement(10, rack.Rackmount(2, "rackmount 2"))
 
 	r.addElement(13, rack.PatchPanel(1, "12p patch panel"))
+
+	s = rack.Shelf2U(3)
+	r.addElement(15, s)
+
+	sa.addElement(rack.Box(200, 100, "box A"))
+	sa.addElement(rack.Box(150, 200, "box B"))
+
+	s.addElement(rack.Box(100, 400, "box C"))
+	
 	print RackView().render(r)
