@@ -8,9 +8,10 @@ class AST:
 		return self.sourceposition
 
 class Rack(AST):
-	def __init__(self, name, elemlist, sourceposition):
+	def __init__(self, name, attrlist, elemlist, sourceposition):
 		AST.__init__(self, sourceposition)
 		self.name = name
+		self.attrlist = attrlist
 		self.elemlist = elemlist
 
 	def visit(self, visitor, obj):

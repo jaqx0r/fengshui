@@ -10,13 +10,15 @@ class RackFullException:
 	pass
 
 class Rack(object):
-	def __init__(self, name, units):
+	def __init__(self, name, attr, units):
 		self._name = name
 		self.units = units
 
 		self.affinity = "bottom"
 
 		self._elements = {}
+
+		self.__attributes = attr
 
 	def addElement(self, position, element):
 		if position > self.units or position < 0:
@@ -91,6 +93,14 @@ class Rack(object):
 
 	def update(self, d):
 		self.__dict__.update(d)
+
+	def _get_depth(self):
+		if self.__attributes.has_key('depth'):
+			return self.__attributes['depth']
+		else:
+			return 0
+
+	depth = property(_get_depth)
 
 class RackElement(object):
 	def __init__(self, units=1, name="rack element", network=1, power=1, cliplock=4):

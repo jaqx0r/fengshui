@@ -131,10 +131,16 @@ class RackView:
 		self.ps.setfont()
 		for (k, v) in [("network port", rack.network),
 					   ("power outlet", rack.power)
-			]:
+					   ]:
 			self.ps.newpath()
 			self.ps.moveto(0, y)
 			self.ps.show("(%s %s%s)" % (v, k, ["s", ""][v == 1]))
+			y -= size
+		for (k, v) in [("mm deep", rack.depth),
+					   ]:
+			self.ps.newpath()
+			self.ps.moveto(0, y)
+			self.ps.show("(%s%s)" % (v, k))
 			y -= size
 		self.ps.grestore()
 

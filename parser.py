@@ -78,11 +78,16 @@ class Parser:
 		self.start(sp)
 		self.match(Token.RACK)
 		i = self.parseIdentifier()
+		if self.currenttoken.kind == Token.LSQUARE:
+			a = self.parseAttributeList()
+		else:
+			self.finish(sp)
+			a = EmptyAttributeList(sp)
 		self.match(Token.LCURLY)
 		s = self.parseElemList()
 		self.match(Token.RCURLY)
 		self.finish(sp)
-		d = Rack(i, s, sp)
+		d = Rack(i, a, s, sp)
 		return d
 
 	def parseElemList(self):

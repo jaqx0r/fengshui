@@ -29,7 +29,8 @@ class RackBuilder:
 
 	def visitRack(self, ast, obj):
 		name = ast.name.visit(self, obj)
-		r = rack.Rack(name, 47)
+		attr = ast.attrlist.visit(self, obj)
+		r = rack.Rack(name, attr, 47)
 		ast.name.visit(self, r)
 		
 		ast.elemlist.visit(self, r)
