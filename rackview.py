@@ -23,10 +23,12 @@ class RackView:
 		self._top = self._image.documentElement
 		self._top.setAttribute("xmlns", "http://www.w3.org/2000/svg")
 
-	def render(self, thing):
+	def render(self, thing, options = []):
 		"""
 		@param thing the rack or racks to be drawn
 		"""
+
+		self._renderopts = options
 
 		if isinstance(thing, rack.Rack):
 			self._top.appendChild(self._image.createComment("rack"))
@@ -161,14 +163,28 @@ class RackView:
 		e.appendChild(title)
 
 		if isinstance(element, rack.Rackmount):
-			re = self.visitRackmount(element)
+			if 'norackmount' not in self._renderopts:
+				re = self.visitRackmount(element)
+			else:
+				re = self.visitEmptyRackElement(pos)
 		elif isinstance(element, rack.PatchPanel):
-			re = self.visitPatchPanel(element)
+			if 'nopatchpanel' not in self._renderopts:
+				re = self.visitPatchPanel(element)
+			else:
+				re = self.visitEmptyRackElement(pos)
 		elif isinstance(element, rack.CableManagement):
-			re = self.visitPatchPanel(element)
+			if 'nocablemanagement' not in self._renderopts:
+				re = self.visitPatchPanel(element)
+			else:
+				re = self.visitEmptyRackElement(pos)
 		elif isinstance(element, rack.Shelf):
-			re = self.visitShelfArea(element)
+			if 'noshelf' not in self._renderopts:
+				re = self.visitShelfArea(element)
+			else:
+				for i in range(pos, pos + element._units):
+					re = self.visitEmptyRackElement(i)
 		else:
+			#re = self.visitEmptyRackElement(pos)
 			re = None
 
 		if re is not None:
@@ -329,7 +345,8 @@ class RackView:
 		for se in shelf._elements:
 			e.appendChild(self._image.createComment("shelf element"))
 			shelem = self.visitShelfElement(se)
-			e.appendChild(shelem)
+			if 'nobox' not in self._renderopts:
+				e.appendChild(shelem)
 
 			# translate to the baseline of the shelf and flip upside down
 			shelem.setAttribute("transform", "translate(%s,%s) scale(1,-1)" % (xpos, self._unitsize * (shelf._units - 1) + (self._unitsize - shelf._baseline)))
