@@ -8,8 +8,10 @@ import string
 
 class Scanner:
 	def __init__(self, sourcefile):
-		self.sourcefile = sourcefile
-		self.currentchar = self.sourcefile.getNextChar()
+		self.filestack = 0
+		self.sourcefile = []
+		self.sourcefile.append(sourcefile)
+		self.currentchar = self.sourcefile[self.filestack].getNextChar()
 		self.tokeninspected = None
 		self.charpos = 1
 		self.linepos = 1
@@ -21,9 +23,9 @@ class Scanner:
 		currentchar = self.currentchar
 		charpos = self.charpos
 		linepos = self.linepos
-		self.sourcefile.mark()
+		self.sourcefile[self.filestack].mark()
 		self.tokeninspected = self.getToken()
-		self.sourcefile.reset()
+		self.sourcefile[self.filestack].reset()
 		self.linepos = linepos
 		self.charpos = charpos
 		self.currentchar = currentchar
@@ -42,10 +44,10 @@ class Scanner:
 			self.charpos = ((self.charpos / 8) + 1) * 8 + 1
 		else:
 			self.charpos += 1
-		self.currentchar = self.sourcefile.getNextChar()
+		self.currentchar = self.sourcefile[self.filestack].getNextChar()
 
 	def inspectChar(self, nthchar):
-		return self.sourcefile.inspectChar(nthchar)
+		return self.sourcefile[self.filestack].inspectChar(nthchar)
 
 	def nextToken(self):
 		r = None

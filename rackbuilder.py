@@ -26,7 +26,7 @@ class RackBuilder:
 		if hasattr(elem, 'has_key'):
 			obj.update(elem)
 		else:
-			obj.__add__(elem)
+			obj += elem
 
 		ast.elemlist.visit(self, obj)
 
@@ -34,7 +34,19 @@ class RackBuilder:
 		pass
 
 	def visitShelf(self, ast, obj):
-		s = rack.Shelf1RU()
+		attr = ast.attributes.visit(self, obj)
+
+		if attr.has_key('type'):
+			t = attr['type']
+			del attr['type']
+		else:
+			t = "heavy"
+
+		if t == "heavy":
+			s = rack.Shelf1RU(**attr)
+		elif t == "thin":
+			s = rack.Shelf2U(**attr)
+
 		ast.elemlist.visit(self, s)
 
 		# work out how tall the shelf is
@@ -43,6 +55,10 @@ class RackBuilder:
 			if e.height > h:
 				h = e.height
 		s.units = int(math.ceil(h / 43.5))
+		if t == "heavy":
+			s.units += 1
+		s.units -= s.gap
+		
 		return s
 
 	def visitIdentifier(self, ast, obj):
@@ -77,6 +93,8 @@ class RackBuilder:
 			re = rack.Box(**attr)
 		elif t == "switch":
 			re = rack.Box(**attr)
+		elif t == "cablemanagement":
+			re = rack.CableManagement(**attr)
 		return re
 
 	def visitEmptyAttributeList(self, ast, obj):

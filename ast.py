@@ -50,8 +50,9 @@ class RackElem(Elem):
 		return visitor.visitRackElem(self, obj)
 
 class Shelf(Elem):
-	def __init__(self, elemlist, sourceposition):
+	def __init__(self, attributes, elemlist, sourceposition):
 		Elem.__init__(self, sourceposition)
+		self.attributes = attributes
 		self.elemlist = elemlist
 
 	def visit(self, visitor, obj):

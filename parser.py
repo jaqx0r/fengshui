@@ -77,12 +77,17 @@ class Parser:
 		self.start(sp)
 
 		self.match(Token.SHELF)
+		if self.currenttoken.kind == Token.LSQUARE:
+			a = self.parseAttributeList()
+		else:
+			self.finish(sp)
+			a = EmptyAttributeList(sp)
 		self.match(Token.LCURLY)
 		l = self.parseElemList()
 		self.match(Token.RCURLY)
 		
 		self.finish(sp)
-		s = Shelf(l, sp)
+		s = Shelf(a, l, sp)
 		return s
 
 	def parseRackElemOrAttribute(self):

@@ -6,6 +6,9 @@ class OverlapException:
 class OutOfRackException:
 	pass
 
+class RackFullException:
+	pass
+
 class Rack:
 	def __init__(self, name, units):
 		self._name = name
@@ -52,9 +55,9 @@ class Rack:
 
 	units = property(_get_units, _set_units)
 
-	def __add__(self, o):
+	def __iadd__(self, o):
 		if self.affinity == "bottom":
-			r = range(0, self.units - o.units)
+			r = range(0, self.units - o.units + 1)
 		else:
 			r = range(self.units - o.units, 0, -1)
 
@@ -73,10 +76,11 @@ class Rack:
 				break
 
 		if o not in self._elements.values():
-			raise Exception
+			raise RackFullException
+
+		return self
 
 	def update(self, d):
-		#print d
 		self.__dict__.update(d)
 
 class RackElement(object):
@@ -120,13 +124,16 @@ class CableManagement(RackElement):
 		visitor.visitCableManagement(self)
 
 class Shelf(RackElement):
-	def __init__(self, units=1, name = "shelf", network=0, power=0, cliplock=4):
+	def __init__(self, units=1, name = "shelf", network=0, power=0, cliplock=4, gap=0):
 		RackElement.__init__(self, units, name, network, power, cliplock)
 
 		self._elements = []
 		self._baseline = 45
 		self._bottomline = 0
 		self._bracketunits = 1
+		# hack to allow us to tell the builder if the elem above it has
+		# enough space to allow things to go into its space
+		self.gap = gap
 
 	def addElement(self, element):
 		self._elements.append(element)
@@ -142,12 +149,21 @@ class Shelf(RackElement):
 
 	network = property(_get_network)
 
-	def __add__(self, o):
+	def __iadd__(self, o):
 		self._elements.append(o)
+		return self
+
+	def _get_gap(self):
+		return self.__gap
+
+	def _set_gap(self, value):
+		self.__gap = int(value)
+
+	gap = property(_get_gap, _set_gap)
 
 class Shelf1RU(Shelf):
-	def __init__(self, units=1, name = "1RU shelf", network=0, power=0, cliplock=4):
-		Shelf.__init__(self, units, name, network, power, cliplock)
+	def __init__(self, units=1, name = "1RU shelf", network=0, power=0, cliplock=4, gap=0):
+		Shelf.__init__(self, units, name, network, power, cliplock, gap)
 		self._baseline = 35
 		self._bottomline = 10
 		self._bracketunits = 1
@@ -156,8 +172,8 @@ class Shelf1RU(Shelf):
 		visitor.visitShelf1RU(self)
 
 class Shelf2U(Shelf):
-	def __init__(self, units=2, name = "thin shelf w/ 30kg rating", network=0, power=0, cliplock=0):
-		Shelf.__init__(self, units, name, network, power, cliplock)
+	def __init__(self, units=2, name = "thin shelf w/ 30kg rating", network=0, power=0, cliplock=0, gap=0):
+		Shelf.__init__(self, units, name, network, power, cliplock, gap)
 		self._baseline = 0
 		self._bottomline = -15
 		self._bracketunits = 2
