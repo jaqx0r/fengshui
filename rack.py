@@ -3,6 +3,9 @@
 class OverlapException:
 	pass
 
+class OutOfRackException:
+	pass
+
 class Rack:
 	def __init__(self, name, units):
 		self._name = name
@@ -11,11 +14,15 @@ class Rack:
 		self._elements = {}
 
 	def addElement(self, position, element):
+		if position > self._units or position < 0:
+			raise OutOfRackException
 		if self._elements.has_key(position):
 			raise OverlapException
 		self._elements[position] = element
 		if element._units > 1:
 			for i in range(position+1, position + element._units):
+				if i > self._units or i < 0:
+					raise OutOfRackException
 				if self._elements.has_key(i):
 					raise OverlapException
 				self._elements[i] = None
@@ -46,14 +53,14 @@ class Shelf(RackElement):
 		self._elements.append(element)
 
 class Shelf1RU(Shelf):
-	def __init__(self, units, name = "1RU shelf w/ rails"):
+	def __init__(self, units, name = "1RU shelf"):
 		Shelf.__init__(self, units, name)
 		self._baseline = 35
 		self._bottomline = 10
 		self._bracketunits = 1
 
 class Shelf2U(Shelf):
-	def __init__(self, units, name = "2U shelf w/ 30kg rating"):
+	def __init__(self, units, name = "thin shelf w/ 30kg rating"):
 		Shelf.__init__(self, units, name)
 		self._baseline = 0
 		self._bottomline = -15
