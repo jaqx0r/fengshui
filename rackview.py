@@ -61,10 +61,10 @@ class RackView:
 
 		self._top.setAttribute("viewBox", "0 0 %s %s" % (w, h))
 
-		self._top.setAttribute("width", "150px")
-		self._top.setAttribute("height", "300px")
+		self._top.setAttribute("width", "%spx" % (w,))
+		self._top.setAttribute("height", "%spx" % (h,))
 
-		return self._image.toprettyxml()
+		return self._image.toxml()
 
 	def visitRackArray(self, racks):
 		rs = self._image.createElement("g")
