@@ -41,8 +41,14 @@ class RackView:
 		return self.ps.render()
 
 	def visitRackArray(self, racks):
+		x = 0
 		for rack in racks._elements:
+			self.ps.gsave()
+			self.ps.translate(x, 0)
 			self.visitRack(rack)
+			self.ps.grestore()
+
+			x += 2 * barwidth + 2 * bracketwidth + rackwidth + 5
 
 	def visitRack(self, rack):
 		"""
