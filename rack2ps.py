@@ -180,6 +180,8 @@ class RackView:
 				self.visitCableManagement(element)
 			else:
 				self.visitEmptyRackElement()
+		elif isinstance(element, rack.Gap):
+			self.visitEmptyRackElement()
 		elif isinstance(element, rack.Shelf):
 			if 'noshelf' not in self.options:
 				self.visitShelfArea(element)
@@ -228,6 +230,9 @@ class RackView:
 		@param panel the patchpanel element
 		"""
 		self.visitRackmount(panel)
+
+	def visitGap(self, gap):
+		self.visitEmptyRackElement(self)
 
 	def visitShelfArea(self, shelf):
 		"""

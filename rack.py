@@ -123,6 +123,13 @@ class CableManagement(RackElement):
 	def visit(self, visitor):
 		visitor.visitCableManagement(self)
 
+class Gap(RackElement):
+	def __init__(self, units=1, name="gap"):
+		RackElement.__init__(self, units, name, 0, 0, 0)
+
+	def visit(self, visitor):
+		visitor.visitGap(self)
+
 class Shelf(RackElement):
 	def __init__(self, units=1, name = "shelf", network=0, power=0, cliplock=4, gap=0):
 		RackElement.__init__(self, units, name, network, power, cliplock)

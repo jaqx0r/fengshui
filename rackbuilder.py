@@ -112,6 +112,8 @@ class RackBuilder:
 			re = rack.Box(**attr)
 		elif t == "cablemanagement":
 			re = rack.CableManagement(**attr)
+		elif t == "gap":
+			re = rack.Gap(**attr)
 		return re
 
 	def visitEmptyAttributeList(self, ast, obj):
