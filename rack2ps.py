@@ -23,7 +23,7 @@ class RackView:
 		@param thing the rack or racks to be drawn
 		"""
 
-		self.ps.translate(72, 72)
+		self.ps.translate(36, 36)
 		#self.ps.scale(0.3, 0.3)
 		
 		if isinstance(thing, rack.RackArray):
@@ -115,13 +115,25 @@ class RackView:
 		self.ps.lineto(30, element._units * unitsize)
 		self.ps.stroke()
 		# size label
-		self.ps.setgray(0.25)
+		self.ps.setgray(0.5)
 		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
 		self.ps.scalefont(20)
 		self.ps.setfont()
 		self.ps.newpath()
 		self.ps.moveto(5, element._units * unitsize / 2 - 7)
 		self.ps.show("(%s)" % (element._units,))
+		self.ps.grestore()
+
+		# draw rack unit position on the right hand side
+		self.ps.gsave()
+		self.ps.translate(rackwidth + bracketwidth, 0)
+		self.ps.setgray(0.5)
+		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
+		self.ps.scalefont(20)
+		self.ps.setfont()
+		self.ps.newpath()
+		self.ps.moveto(5, 5)
+		self.ps.show("(%s)" % (pos,))
 		self.ps.grestore()
 		
 		if isinstance(element, rack.Rackmount):
