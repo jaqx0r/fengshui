@@ -128,7 +128,7 @@ class Shelf(RackElement):
 		RackElement.__init__(self, units, name, network, power, cliplock)
 
 		self._elements = []
-		self._baseline = 45
+		self._baseline = 43.5
 		self._bottomline = 0
 		self._bracketunits = 1
 		# hack to allow us to tell the builder if the elem above it has

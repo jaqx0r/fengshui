@@ -70,9 +70,10 @@ class RackBuilder:
 		for e in s._elements:
 			if e.height > h:
 				h = e.height
+		h += s._baseline
 		s.units = int(math.ceil(h / 43.5))
-		if t == "heavy":
-			s.units += 1
+
+		# evil hack
 		s.units -= s.gap
 		
 		return s
