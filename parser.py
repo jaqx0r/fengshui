@@ -17,7 +17,7 @@ class Parser:
 		if (self.currenttoken.kind == expected):
 			self.accept()
 		else:
-			raise Exception, "%s: unexpected %s" % (self.currenttoken.sourceposition, self.currenttoken.spelling)
+			raise Exception, "%s:%s: '%s' unexpected" % (self.scanner.filename(), self.currenttoken.sourceposition, self.currenttoken.spelling)
 
 	def accept(self):
 		self.prevtokenposition = self.currenttoken.sourceposition

@@ -140,6 +140,12 @@ class Scanner:
 
 		return tok
 
+	def filename(self):
+		if self.include:
+			return self.include.sourcefile
+		else:
+			return self.sourcefile
+
 if __name__ == '__main__':
 	from scanner import Scanner
 	from sourcefile import SourceFile

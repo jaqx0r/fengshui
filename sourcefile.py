@@ -2,7 +2,8 @@
 
 class SourceFile:
 	def __init__(self, filename):
-		self.file = open(filename)
+		self.name = filename
+		self.file = open(self.name)
 
 	def getNextChar(self):
 		c = self.file.read(1)
@@ -20,3 +21,6 @@ class SourceFile:
 
 	def reset(self):
 		self.file.seek(self.markpos, 0)
+
+	def __str__(self):
+		return self.name
