@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+class OverlapException:
+	pass
+
 class Rack:
 	def __init__(self, name, units):
 		self._name = name
@@ -8,9 +11,13 @@ class Rack:
 		self._elements = {}
 
 	def addElement(self, position, element):
+		if self._elements.has_key(position):
+			raise OverlapException
 		self._elements[position] = element
 		if element._units > 1:
 			for i in range(position+1, position + element._units):
+				if self._elements.has_key(i):
+					raise OverlapException
 				self._elements[i] = None
 
 class RackElement:
@@ -31,12 +38,17 @@ class Shelf(RackElement):
 		RackElement.__init__(self, units, name)
 
 		self._elements = []
+		self._baseline = 10
 
 	def addElement(self, element):
 		self._elements.append(element)
 
 class ShelfElement:
-	pass
+	def __init__(self, width, height, name = "shelf element"):
+		self._width = width
+		self._height = height
+		self._name = name
 
 class Box(ShelfElement):
-	pass
+	def __init__(self, width, height, name = "box"):
+		ShelfElement.__init__(self, width, height, name)

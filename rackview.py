@@ -13,8 +13,8 @@ class RackView:
 		self._imgheight = 500
 		self._imgwidth = self._imgheight * self._rackwidth / self._rackheight
 
-		self._xpadding = 100
-		self._ypadding = 50
+		self._xpadding = 60
+		self._ypadding = 25
 
 		self._image = xml.dom.minidom.parseString("<svg/>")
 		self._top = self._image.documentElement
@@ -119,19 +119,19 @@ class RackView:
 			# upper horz line
 			p1 = self._image.createElement("path")
 			measure.appendChild(p1)
-			p1.setAttribute("d", "M -35 0 -15 0")
+			p1.setAttribute("d", "M -30 0 -10 0")
 			# lower horz line
 			p2 = self._image.createElement("path")
 			measure.appendChild(p2)
-			p2.setAttribute("d", "M -35 %s -15 %s" % (self._unitsize * element._units, self._unitsize * element._units))
+			p2.setAttribute("d", "M -30 %s -10 %s" % (self._unitsize * element._units, self._unitsize * element._units))
 			# connecting line
 			p3 = self._image.createElement("path")
 			measure.appendChild(p3)
-			p3.setAttribute("d", "M -25 0 -25 %s" % (self._unitsize * element._units,))
+			p3.setAttribute("d", "M -20 0 -20 %s" % (self._unitsize * element._units,))
 			# unit size label
 			label = self._image.createElement("text")
 			measure.appendChild(label)
-			label.setAttribute("x", "-30")
+			label.setAttribute("x", "-25")
 			label.setAttribute("y", "%s" % (self._unitsize * element._units / 2.0 + self._unitsize * 0.25,))
 			label.setAttribute("style", "fill:black;stroke:none;text-anchor:right;font-size:36pt;")
 			label.appendChild(self._image.createTextNode("%s" % (element._units,)))
@@ -197,7 +197,6 @@ class RackView:
 		rect.setAttribute("width", "445")
 		rect.setAttribute("style", "fill:none;stroke:black;")
 
-		# add a label
 		label = self._image.createElement("text")
 		e.appendChild(label)
 		label.appendChild(self._image.createTextNode(element._name))
@@ -263,6 +262,20 @@ class RackView:
 		# shift the shelf bit to the bottom of the area
 		s.setAttribute("transform", "translate(0,%s)" % (self._unitsize * (shelf._units - 1),))
 
+		xpos = 0
+		for se in shelf._elements:
+			e.appendChild(self._image.createComment("shelf element"))
+			shelem = self.visitShelfElement(se)
+			e.appendChild(shelem)
+
+			# translate to the baseline of the shelf and flip upside down
+			shelem.setAttribute("transform", "translate(%s,%s) scale(1,-1)" % (xpos, self._unitsize * (shelf._units - 1) + shelf._baseline))
+
+			# get width of this one
+			w = int(shelem.getAttribute("width"))
+
+			xpos += w
+
 		return e
 
 	def visitShelf(self, shelf):
@@ -284,7 +297,7 @@ class RackView:
 		baseline = self._image.createElement("path")
 		e.appendChild(baseline)
 
-		baseline.setAttribute("d", "M 0 10 %s 10" % (self._rackwidth,))
+		baseline.setAttribute("d", "M 0 %s %s %s" % (shelf._baseline, self._rackwidth, shelf._baseline))
 
 		bottomline = self._image.createElement("path")
 		e.appendChild(bottomline)
@@ -301,11 +314,51 @@ class RackView:
 
 		return e
 
+	def visitShelfElement(self, element):
+		"""
+		@param element the element to render
+		"""
+		# e is our shelf element
+		e = self._image.createElement("g")
+		title = self._image.createElement("title")
+		title.appendChild(self._image.createTextNode("shelf element"))
+		e.appendChild(title)
+
+		rect = self._image.createElement("rect")
+		e.appendChild(rect)
+
+		rect.setAttribute("x", "0")
+		rect.setAttribute("y", "0")
+		rect.setAttribute("width", "%s" % (element._width,))
+		rect.setAttribute("height", "%s" % (element._height,))
+		rect.setAttribute("style", "fill:none;stroke:black;")
+
+		# hack to pass up width to parent
+		e.setAttribute("width", "%s" % (element._width,))
+
+		# add a label
+		label = self._image.createElement("text")
+		e.appendChild(label)
+		label.appendChild(self._image.createTextNode(element._name))
+		label.setAttribute("x", "0")
+		label.setAttribute("y", "0")
+		label.setAttribute("style", "fill:black;stroke:none;text-anchor:left;font-size:30pt;")
+		# flip it right way up
+		label.setAttribute("transform", "translate(20,%s) scale(1,-1)" % (element._height - 32,))
+
+		return e
+
 if __name__ == '__main__':
 	r = rack.Rack("colo 4", 47)
 	
 	s1 = rack.Shelf(11)
 	r.addElement(0, s1)
+
+	b1 = rack.Box(210, 420, "connectingspace")
+	s1.addElement(b1)
+
+	b2 = rack.Box(215, 425, "jurcevic")
+	s1.addElement(b2)
 
 	s2 = rack.Shelf(11, "shelf 2")
 	r.addElement(11, s2)
@@ -319,4 +372,28 @@ if __name__ == '__main__':
 	patchpanel = rack.PatchPanel(1)
 	r.addElement(46, patchpanel)
 
+	dynaweb = rack.Rackmount(1, "dynaweb")
+	r.addElement(26, dynaweb)
+
+	classroomvideo = rack.Rackmount(1, "classroom video")
+	r.addElement(27, classroomvideo)
+
+	dash = rack.Rackmount(1, "ish group dash")
+	r.addElement(28, dash)
+
+	flash = rack.Rackmount(1, "ish group flash")
+	r.addElement(29, flash)
+
+	valuehost = rack.Rackmount(1, "valuehost")
+	r.addElement(30, valuehost)
+
+	r.addElement(31, rack.Rackmount(1, "neathosting"))
+
+	r.addElement(32, rack.Rackmount(9, "biznet oz"))
+
+	s2.addElement(rack.Box(185, 425, "redfireengine"))
+	s2.addElement(rack.Box(220, 410, "jurcevic digital"))
+
+	
+	
 	print RackView().render(r)
