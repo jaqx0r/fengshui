@@ -25,6 +25,11 @@ class RackView:
 
 		self.ps.translate(36, 36)
 		#self.ps.scale(0.3, 0.3)
+
+		# set the font we're using for the whole picture
+		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
+		self.ps.scalefont(20)
+		self.ps.setfont()
 		
 		if isinstance(thing, rack.RackArray):
 			self.visitRackArray(thing)
@@ -116,9 +121,6 @@ class RackView:
 		self.ps.stroke()
 		# size label
 		self.ps.setgray(0.5)
-		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
-		self.ps.scalefont(20)
-		self.ps.setfont()
 		self.ps.newpath()
 		self.ps.moveto(5, element._units * unitsize / 2 - 7)
 		self.ps.show("(%s)" % (element._units,))
@@ -128,9 +130,6 @@ class RackView:
 		self.ps.gsave()
 		self.ps.translate(rackwidth + bracketwidth, 0)
 		self.ps.setgray(0.5)
-		self.ps.findfont(self.ps.quote("Helvetica-Bold"))
-		self.ps.scalefont(20)
-		self.ps.setfont()
 		self.ps.newpath()
 		self.ps.moveto(5, 5)
 		self.ps.show("(%s)" % (pos,))
@@ -188,9 +187,6 @@ class RackView:
 		self.ps.stroke()
 
 		# label
-		self.ps.findfont(self.ps.quote("Helvetica"))
-		self.ps.scalefont(20)
-		self.ps.setfont()
 		self.ps.newpath()
 		self.ps.moveto(5, element._units * unitsize - 14 - 5)
 		self.ps.show("(%s)" % (element._name,))
@@ -236,6 +232,6 @@ if __name__ == '__main__':
 	r = rack.Rack('rack', 47)
 	sa = rack.Shelf1RU(6)
 	r.addElement(1, sa)
-	r.addElement(8, rack.Rackmount(1, "rackmount"))
-	r.addElement(10, rack.Rackmount(2, "rackmount"))
+	r.addElement(8, rack.Rackmount(1, "rackmount 1"))
+	r.addElement(10, rack.Rackmount(2, "rackmount 2"))
 	print RackView().render(r)
