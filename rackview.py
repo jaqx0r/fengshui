@@ -175,7 +175,7 @@ class RackView:
 			# side measurements
 			measure = self._image.createElement("g")
 			e.appendChild(measure)
-			measure.setAttribute("style", "fill:none;stroke:black;")
+			measure.setAttribute("style", "fill:none;stroke:#555;")
 			# upper horz line
 			p1 = self._image.createElement("path")
 			measure.appendChild(p1)
@@ -193,7 +193,7 @@ class RackView:
 			measure.appendChild(label)
 			label.setAttribute("x", "-%s" % (44 + len("%s" % (element._units,)) * 23,))
 			label.setAttribute("y", "%s" % (self._unitsize * element._units / 2.0 + self._unitsize * 0.25,))
-			label.setAttribute("style", "fill:black;stroke:none;text-anchor:right;font-size:28pt;")
+			label.setAttribute("style", "fill:black;stroke:none;font-size:28pt;")
 			label.appendChild(self._image.createTextNode("%s" % (element._units,)))
 
 			# draw a position label right side of the rack
