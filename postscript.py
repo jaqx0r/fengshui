@@ -1,147 +1,99 @@
 #!/usr/bin/python
 
-class PostScriptRenderer:
-	"""
-	Level 1 PostScript renderer.
-	"""
-	def __init__(self):
-		pass
-
-	def render(self, ast):
-		output = ast.visit(self)
-		return output
-
-	def visitPostScript(self, ast):
-		output = "%!\n"
-		for child in ast.children:
-			output += child.visit(self)
-		output += "showpage\n"
-		return output
-
-	def visitMoveTo(self, ast):
-		output = "%s %s moveto\n" % (ast.src, ast.dst)
-		return output
-
-	def visitLineTo(self, ast):
-		output = "%s %s lineto\n" % (ast.src, ast.dst)
-		return output
-
-	def visitNewPath(self, ast):
-		output = "newpath\n"
-		return output
-
-	def visitClosePath(self, ast):
-		output = "closepath\n"
-		return output
-
-	def visitStroke(self, ast):
-		output = "stroke\n"
-		return output
-
-	def visitFindFont(self, ast):
-		output = "%s findfont\n" % (ast.font,)
-		return output
-
-	def visitScaleFont(self, ast):
-		output = "%s scalefont\n" % (ast.scale,)
-		return output
-
-	def visitSetFont(self, ast):
-		output = "setfont\n"
-		return output
-
-	def visitShow(self, ast):
-		output = "(%s) show\n" % (ast.text,)
-		return output
-
 class PostScript:
+	"""
+	Level 1 PostScript rendering.
+	"""
 	def __init__(self):
-		self.children = []
+		self.o = []
+		self.indent = 0
 
-	def visit(self, visitor):
-		return visitor.visitPostScript(self)
+	def append(self, command):
+		self.o.append(" " * self.indent + command)
 
-class MoveTo:
-	def __init__(self, src, dst):
-		self.src = src
-		self.dst = dst
+	def moveto(self, x, y):
+		self.append("%s %s moveto" % (x, y))
 
-	def visit(self, visitor):
-		return visitor.visitMoveTo(self)
+	def lineto(self, x, y):
+		self.append("%s %s lineto" % (x, y))
 
-class LineTo:
-	def __init__(self, src, dst):
-		self.src = src
-		self.dst = dst
+	def rlineto(self, x, y):
+		self.append("%s %s rlineto" % (x, y))
 
-	def visit(self, visitor):
-		return visitor.visitLineTo(self)
+	def gsave(self):
+		self.append("gsave")
+		self.indent += 2
 
-class NewPath:
-	def __init__(self):
-		pass
+	def grestore(self):
+		self.indent -= 2
+		self.append("grestore")
 
-	def visit(self, visitor):
-		return visitor.visitNewPath(self)
+	def newpath(self):
+		self.append("newpath")
 
-class ClosePath:
-	def __init__(self):
-		pass
+	def closepath(self):
+		self.append("closepath")
 
-	def visit(self, visitor):
-		return visitor.visitClosePath(self)
+	def stroke(self):
+		self.append("stroke")
 
-class Stroke:
-	def __init__(self):
-		pass
+	def fill(self):
+		self.append("fill")
 
-	def visit(self, visitor):
-		return visitor.visitStroke(self)
+	def showpage(self):
+		self.append("showpage")
 
-class FindFont:
-	def __init__(self, font):
-		self.font = font
+	def findfont(self, font):
+		self.append("/%s findfont" % (font,))
 
-	def visit(self, visitor):
-		return visitor.visitFindFont(self)
+	def scalefont(self, scale):
+		self.append("%s scalefont" % (scale,))
 
-class ScaleFont:
-	def __init__(self, scale):
-		self.scale = scale
+	def setfont(self):
+		self.append("setfont")
 
-	def visit(self, visitor):
-		return visitor.visitScaleFont(self)
+	def show(self, text):
+		self.append("(%s) show" % (text,))
 
-class SetFont:
-	def __init__(self):
-		pass
+	def rotate(self, ang):
+		self.append("%s rotate" % (ang,))
 
-	def visit(self, visitor):
-		return visitor.visitSetFont(self)
+	def translate(self, x, y):
+		self.append("%s %s translate" % (x, y))
 
-class Show:
-	def __init__(self, text):
-		self.text = text
+	def scale(self, x, y):
+		self.append("%s %s scale" % (x, y))
 
-	def visit(self, visitor):
-		return visitor.visitShow(self)
+	def clip(self):
+		self.append("clip")
+
+	def charpath(self, arg):
+		self.append("%s charpath" % (arg,))
+
+	def setgray(self, gray):
+		self.append("%s setgray" % (gray,))
+
+	def setlinewidth(self, linewidth):
+		self.append("%s setlinewidth" % (linewidth,))
+
+	def comment(self, comment):
+		self.append("%% %s" % (comment,))
+
+	def render(self):
+		output = "%!\n"
+		for line in self.o:
+			output += line + "\n"
+		return output
 
 if __name__ == '__main__':
 	ps = PostScript()
-	ps.children.append(NewPath())
-	ps.children.append(MoveTo(72, 72))
-	ps.children.append(LineTo(144, 72))
-	ps.children.append(LineTo(144, 144))
-	ps.children.append(LineTo(72, 144))
-	ps.children.append(ClosePath())
-	ps.children.append(Stroke())
-
-	ps.children.append(FindFont("/Times-Roman"))
-	ps.children.append(ScaleFont(20))
-	ps.children.append(SetFont())
-	ps.children.append(NewPath())
-	ps.children.append(MoveTo(72, 200))
-	ps.children.append(Show("Hello world!"))
-
-	psr = PostScriptRenderer()
-	print psr.render(ps)
+	ps.comment("sample of printing text")
+	ps.findfont("Times-Roman")
+	ps.scalefont(20)
+	ps.setfont()
+	ps.gsave()
+	ps.newpath()
+	ps.moveto(72, 72)
+	ps.show("Hello, world!")
+	ps.grestore()
+	print ps.render()
