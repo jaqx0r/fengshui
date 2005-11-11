@@ -1,11 +1,10 @@
 #!/usr/bin/python
 
 import getopt
-from parser import Parser
-from scanner import Scanner
-from sourcefile import SourceFile
 from rackbuilder import RackBuilder
 import rack2ps, rack2tex
+
+import xml.dom.minidom
 
 def usage():
 	print "usage: %s -T type -o outfile -v view filename"
@@ -46,7 +45,7 @@ def main(args):
 	if type is None:
 		type = "eps"
 
-	ast = Parser(Scanner(SourceFile(infile))).parse()
+	ast = xml.dom.minidom.parse(infile)
 	rack = RackBuilder().build(ast)
 	if type == "eps":
 		output = rack2ps.RackView(infile).render(rack)
