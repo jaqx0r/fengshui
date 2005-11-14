@@ -52,21 +52,14 @@ class RackView:
 								  cairo.FONT_WEIGHT_BOLD)
 		self.ctx.set_font_size(20)
 
-		#self.ps.translate(40, 40)
-		#self.ps.scale(0.3, 0.3)
+		self.ctx.translate(40, 100)
 		
-		#if isinstance(thing, rack.RackArray):
-		#	self.visitRackArray(thing)
-		#elif isinstance(thing, rack.Rack):
-		#	self.visitRack(thing)
-		#else:
-		#	raise RenderingDumbThingException
-
-
-		self.ctx.translate(40, 80)
-		#self.ctx.scale(0.3, 0.3)
-		
-		self.visitRack(thing)
+		if isinstance(thing, rack.RackArray):
+			self.visitRackArray(thing)
+		elif isinstance(thing, rack.Rack):
+			self.visitRack(thing)
+		else:
+			raise RenderingDumbThingException
 
 		self.surf.write_to_png("outfile.png")
 		
