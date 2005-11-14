@@ -24,6 +24,7 @@ def main(args):
 
 	for o, a in opts:
 		if o == "-T":
+			print >> sys.stderr, "Specifying output type currently unsupported"
 			type = a
 		elif o == "-o":
 			outfile = a
