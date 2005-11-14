@@ -47,9 +47,7 @@ def main(args):
 
 	ast = xml.dom.minidom.parse(infile)
 	rack = RackBuilder().build(ast)
-	output = rack2cairo.RackView(infile).render(rack)
-
-	#o.write(output)
+	rack2cairo.RackView(infile).render(rack, o)
 
 import sys
 

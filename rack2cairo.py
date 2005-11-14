@@ -41,7 +41,7 @@ class RackView:
 		self.ctx.scale(1, -1)
 		self.ctx.translate(0, -HEIGHT)
 
-	def render(self, thing):
+	def render(self, thing, output):
 		"""
 		@param thing the rack or racks to be drawn
 		"""
@@ -61,7 +61,7 @@ class RackView:
 		else:
 			raise RenderingDumbThingException
 
-		self.surf.write_to_png("outfile.png")
+		self.surf.write_to_png(output)
 		
 		return None
 	
