@@ -62,7 +62,7 @@ class RackView:
 			self.ps.save()
 			self.ps.translate(rackheight /2.0 + 300, 0)
 			self.ps.scale(0.5, 0.5)
-			self.ps.rotate(90)
+			self.ps.rotate(pi)
 			self.ps.translate(x, 0)
 			self.visitRack(rack)
 			self.ps.restore()
