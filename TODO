@@ -1,0 +1,3 @@
+- clean up rackbuilder to build racks in the correct order
+
+- clean up cairo generator calls to look pretty
