@@ -3,6 +3,8 @@
 import rack
 import cairo
 
+from math import pi
+
 import mx.DateTime
 
 class RenderingDumbThingException(Exception):
@@ -389,10 +391,10 @@ class RackView:
 			# move across to start the arc
 			self.ctx.line_to(-bracketwidth + rad, bh)
 			# top left arc
-			self.ctx.arc(-bracketwidth + rad, bh - rad, rad, 90, 180)
+			self.ctx.arc(-bracketwidth + rad, bh - rad, rad, pi/2, pi)
 			# left side gets drawn by magic
 			# bottom left arc
-			self.ctx.arc(-bracketwidth + rad, rad, rad, 180, 270)
+			self.ctx.arc(-bracketwidth + rad, rad, rad, pi, 3*pi/2)
 			# bottom edge of bracket
 			self.ctx.line_to(0, 0)
 			# now to bottom line of actual shelf
@@ -402,10 +404,10 @@ class RackView:
 			# to bottom of rack unit
 			self.ctx.line_to(rackwidth, 0)
 			# now inverse of left side
-			self.ctx.arc(rackwidth + bracketwidth - rad, rad, rad, 270, 0)
+			self.ctx.arc(rackwidth + bracketwidth - rad, rad, rad, 3*pi/2, 0)
 			# right side for free
 			# top right arc
-			self.ctx.arc(rackwidth + bracketwidth - rad, bh - rad, rad, 0, 90)
+			self.ctx.arc(rackwidth + bracketwidth - rad, bh - rad, rad, 0, pi/2)
 			# close it off
 			self.ctx.line_to(rackwidth, bh)
 			self.ctx.line_to(rackwidth, shelf._baseline)
