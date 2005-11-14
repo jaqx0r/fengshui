@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from math import ceil
+
 class OverlapException:
 	pass
 
@@ -239,6 +241,23 @@ class Shelf(RackElement):
 		self.__gap = int(value)
 
 	gap = property(_get_gap, _set_gap)
+
+	def _get_units(self):
+		h = 0
+		for e in self._elements:
+			if e.height > h:
+				h = e.height
+		h += self._baseline
+		# XXX: hardcoded unit height
+		u = int(ceil(h / 43.5))
+		# evil hack
+		u -= self.gap
+		return u
+
+	def _set_units(self, units):
+		pass
+
+	units = property(_get_units, _set_units)
 
 class Shelf1RU(Shelf):
 	def __init__(self, units=1, name = "1RU shelf", network=0, power=0, cliplock=4, gap=0, notes=""):

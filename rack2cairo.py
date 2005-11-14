@@ -113,7 +113,7 @@ class RackView:
 # 		self.ctx.move_to(5, rackheight + 15)
 # 		self.ctx.show("(%s)" % (rack._name,))
 # 		self.ctx.restore()
-				 
+
 		for y in range(0, rack.units):
 			self.ctx.save()
 			self.ctx.translate(0, y * unitsize)
