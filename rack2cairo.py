@@ -17,20 +17,29 @@ bracketwidth = 15
 barwidth = 40
 bracketrad = 2
 
+WIDTH = int(rackwidth + 200)
+HEIGHT = int(rackheight + 200)
+
 class RackView:
 	def __init__(self, name):
 		self.options = []
 		self.name = name
 
 
-		self.surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, 600, 2100)
+		self.surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
 		self.ctx = cairo.Context(self.surf)
 		self.ctx.set_line_width(1)
 		#self.ctx.identity_matrix()
 		#self.ctx.scale(205, 660)
 
+		# make it white
+		self.ctx.set_source_rgba(1, 1, 1, 1)
+		self.ctx.rectangle(0, 0, WIDTH, HEIGHT)
+		self.ctx.fill_preserve()
+		self.ctx.stroke()
+
 		self.ctx.scale(1, -1)
-		self.ctx.translate(0, -2100)
+		self.ctx.translate(0, -HEIGHT)
 
 	def render(self, thing):
 		"""
@@ -53,6 +62,10 @@ class RackView:
 		#else:
 		#	raise RenderingDumbThingException
 
+
+		self.ctx.translate(40, 80)
+		#self.ctx.scale(0.3, 0.3)
+		
 		self.visitRack(thing)
 
 		self.surf.write_to_png("outfile.png")
