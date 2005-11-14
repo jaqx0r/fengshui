@@ -2,7 +2,7 @@
 
 import getopt
 from rackbuilder import RackBuilder
-import rack2ps, rack2tex
+import rack2cairo
 
 import xml.dom.minidom
 
@@ -47,12 +47,9 @@ def main(args):
 
 	ast = xml.dom.minidom.parse(infile)
 	rack = RackBuilder().build(ast)
-	if type == "eps":
-		output = rack2ps.RackView(infile).render(rack)
-	elif type == "tex":
-		output = rack2tex.RackView(infile).render(rack)
+	output = rack2cairo.RackView(infile).render(rack)
 
-	o.write(output)
+	#o.write(output)
 
 import sys
 
