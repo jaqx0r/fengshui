@@ -23,11 +23,14 @@ class RackView:
 		self.name = name
 
 
-		self.surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, 600, 2200)
+		self.surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, 600, 2100)
 		self.ctx = cairo.Context(self.surf)
 		self.ctx.set_line_width(1)
 		#self.ctx.identity_matrix()
 		#self.ctx.scale(205, 660)
+
+		self.ctx.scale(1, -1)
+		self.ctx.translate(0, -2100)
 
 	def render(self, thing):
 		"""
@@ -36,8 +39,8 @@ class RackView:
 
 
 		# set the font we're using for the whole picture
-		self.ctx.select_font_face("Helvetica-Bold", cairo.FONT_SLANT_NORMAL,
-						   cairo.FONT_WEIGHT_BOLD)
+		self.ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL,
+								  cairo.FONT_WEIGHT_BOLD)
 		self.ctx.set_font_size(20)
 
 		#self.ps.translate(40, 40)
@@ -193,8 +196,12 @@ class RackView:
 			self.ctx.set_source_rgba(0.5, 0.5, 0.5, 1.0)
 			#self.ctx.newpath()
 			self.ctx.move_to(5, element.units * unitsize / 2 - 7)
+			self.ctx.save()
+			self.ctx.scale(1, -1)
 			self.ctx.text_path("%s" % (element.units,))
 			self.ctx.fill_preserve()
+			self.ctx.stroke()
+			self.ctx.restore()
 			self.ctx.restore()
 
 			# draw rack unit position on the right hand side
@@ -203,8 +210,12 @@ class RackView:
 			self.ctx.set_source_rgba(0.5, 0.5, 0.5, 1)
 			#self.ctx.newpath()
 			self.ctx.move_to(5, 5)
+			self.ctx.save()
+			self.ctx.scale(1, -1)
 			self.ctx.text_path("%s" % (pos+1,))
 			self.ctx.fill_preserve()
+			self.ctx.stroke()
+			self.ctx.restore()
 			self.ctx.restore()
 		
 		if isinstance(element, rack.Rackmount):
@@ -273,8 +284,12 @@ class RackView:
 		# label
 		#self.ctx.newpath()
 		self.ctx.move_to(5, element.units * unitsize - 14 - 5)
+		self.ctx.save()
+		self.ctx.scale(1, -1)
 		self.ctx.text_path("%s" % (element.name,))
 		self.ctx.fill_preserve()
+		self.ctx.stroke()
+		self.ctx.restore()
 		
 		self.ctx.restore()
 
@@ -431,7 +446,12 @@ class RackView:
 		# draw label
 		#self.ctx.newpath()
 		self.ctx.move_to(5, element.height - 14 - 5)
+		self.ctx.save()
+		self.ctx.scale(1, -1)
 		self.ctx.text_path("%s" % (element._name,))
+		self.ctx.fill_preserve()
+		self.ctx.stroke()
+		self.ctx.restore()
 
 	def visitCableManagement(self, cman):
 		"""
