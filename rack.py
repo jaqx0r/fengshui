@@ -102,7 +102,10 @@ class Rack(object):
 		else:
 			return 0
 
-	depth = property(_get_depth)
+	def _set_depth(self, value):
+		self.__attributes['depth'] = value
+
+	depth = property(_get_depth, _set_depth)
 
 class RackElement(object):
 	def __init__(self, units=1, name="rack element", network=1, power=1, cliplock=4, image="", notes=""):
