@@ -292,7 +292,11 @@ class RackView:
 		self.ctx.move_to(5, element.units * unitsize - 14 - 5)
 		self.ctx.save()
 		self.ctx.scale(1, -1)
-		self.ctx.text_path("%s" % (element.name,))
+		if hasattr(element, 'label'):
+			label = "%s (%s)" % (element.name, element.label)
+		else:
+			label = element.name
+		self.ctx.text_path("%s" % (label,))
 		self.ctx.fill_preserve()
 		self.ctx.stroke()
 		self.ctx.restore()
@@ -454,7 +458,11 @@ class RackView:
 		self.ctx.move_to(5, element.height - 14 - 5)
 		self.ctx.save()
 		self.ctx.scale(1, -1)
-		self.ctx.text_path("%s" % (element._name,))
+		if hasattr(element, 'label'):
+			label = "%s (%s)" % (element.name, element.label)
+		else:
+			label = element.name
+		self.ctx.text_path("%s" % (label,))
 		self.ctx.fill_preserve()
 		self.ctx.stroke()
 		self.ctx.restore()
