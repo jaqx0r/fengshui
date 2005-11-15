@@ -72,7 +72,7 @@ class Rack(object):
 		if self.affinity == "bottom":
 			r = range(0, self.units - o.units + 1)
 		else:
-			r = range(self.units - o.units, 0, -1)
+			r = range(self.units - o.units, -1, -1)
 
 		for pos in r:
 			if not self._elements.has_key(pos):
