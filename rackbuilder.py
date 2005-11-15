@@ -14,7 +14,11 @@ class RackBuilder:
 		for attrName in rootNode.attributes.keys():
 			aNode = rootNode.attributes.get(attrName)
 			aValue = aNode.nodeValue
-			setattr(r, attrName, aValue)
+			try:
+				setattr(r, attrName, aValue)
+			except AttributeError, ex:
+				print >> sys.stderr, "error setting %s to %s" % (attrName, aValue)
+				raise ex
 		for c in self.walk(rootNode):
 			r += c
 		return r
@@ -36,6 +40,10 @@ class RackBuilder:
 						e += c
 				elif node.nodeName == "box":
 					e = rack.Box()
+				elif node.nodeName == "apc":
+					e = rack.APC()
+				elif node.nodeName == "gap":
+					e = rack.Gap()
 				else:
 					raise NotImplementedError, "no handler for a %s" % node.nodeName
 				
@@ -43,7 +51,11 @@ class RackBuilder:
 				for attrName in attrs.keys():
 					attrNode = attrs.get(attrName)
 					attrValue = attrNode.nodeValue
-					setattr(e, attrName, attrValue)
+					try:
+						setattr(e, attrName, attrValue)
+					except AttributeError, ex:
+						print >> sys.stderr, "error setting %s to %s" % (attrName, attrValue)
+						raise ex
 				things.append(e)
 		# My, Earth sure has a lot of things.
 		#print things
