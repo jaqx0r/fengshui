@@ -1,0 +1,17 @@
+fengshui README
+===============
+
+fengshui is a rack diagram generator.
+
+The input format is XML, which you can see in the file example.feng.
+
+The output format is currently PNG, using the cairo vector graphics library
+(fengshui used to generate PostScript and SVG directly, but cairo already did
+all this and more and I like having less code to worry about -- however you
+need PostScript support built into cairo for it to work...)
+
+Run like so:
+
+    python fengshui.py -o example.png example.feng
+
+If you don't give it an output file, it'll write to standard out.
