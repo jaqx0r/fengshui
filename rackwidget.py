@@ -47,9 +47,8 @@ class PyGtkWidget(gtk.Widget):
 		self.window.move_resize(*self.allocation)
 
 	def do_size_request(self, requisition):
-		width, height = self.layout.get_size()
-		requisition.width = 240 #(width // pango.SCALE + BORDER_WIDTH*4)* 1.45
-		requisition.height = 240 #(3 * height // pango.SCALE + BORDER_WIDTH*4) * 1.2
+		requisition.width = rack2cairo.WIDTH
+		requisition.height = rack2cairo.HEIGHT
 
 	def do_size_allocate(self, allocation):
 		self.allocation = allocation
