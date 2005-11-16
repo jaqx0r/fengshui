@@ -6,9 +6,11 @@
 	<shelf>
 		<box name="storedge" width="440" height="170" label="Sun StorEDGE A1000"/>
 	</shelf>
-	<shelf>
-		<box name="dell" height="305" width="435" label="Dell"/>
-	</shelf>
+
+        <shelf>
+                <box name="minitower1" height="435" width="200"/>
+                <box name="minitower2" height="420" width="210"/>
+        </shelf>
 
 	<gap units="2"/>
 
