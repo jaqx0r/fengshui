@@ -7,8 +7,9 @@ import rack2cairo
 
 def main():
 	parser = OptionParser("usage: %prog [options] FILE")
-	parser.add_option("-T", "--type", dest="outputtype",
-					  help="Write output in format TYPE", metavar="TYPE")
+	# XXX: unused
+	#parser.add_option("-T", "--type", dest="outputtype",
+	#				  help="Write output in format TYPE", metavar="TYPE")
 	parser.add_option("-o", "--output", dest="outfile",
 					  help="Write output to file FILE", metavar="FILE")
 
@@ -22,8 +23,9 @@ def main():
 		o = sys.stdout
 	else:
 		o = open(options.outfile, "w")
-	if not options.outputtype:
-		options.outputtype = "png"
+	# XXX: unused
+	#if not options.outputtype:
+	#	options.outputtype = "png"
 
 	ast = xml.dom.minidom.parse(infile)
 	rack = RackBuilder().build(ast)
