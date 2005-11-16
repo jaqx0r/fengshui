@@ -1,58 +1,45 @@
 #!/usr/bin/python
 
-import getopt
+from optparse import OptionParser
+import xml.dom.minidom
 from rackbuilder import RackBuilder
 import rack2cairo
 
-import xml.dom.minidom
+def main():
+	parser = OptionParser()
+	parser.add_option("-T", "--type", dest="outputtype",
+					  help="Write output in format TYPE", metavar="TYPE")
+	parser.add_option("-o", "--output", dest="outfile",
+					  help="Write output to file FILE", metavar="FILE")
+	parser.add_option("-f", "--file", dest="infile",
+					  help="Read input from file FILE", metavar="FILE")
 
-def usage():
-	print "usage: %s -T type -o outfile -v view filename"
+	(options, args) = parser.parse_args()
 
-def main(args):
-	try:
-		opts, args = getopt.getopt(args, "T:o:v:f:", ["type=", "outfile=", "view=", "file="])
-	except getopt.GetoptError, e:
-		print e
-		usage()
-		return 1
-
-	type = None
-	outfile = None
-	infile = None
-	view = None
-
-	for o, a in opts:
-		if o == "-T":
-			print >> sys.stderr, "Specifying output type currently unsupported"
-			type = a
-		elif o == "-o":
-			outfile = a
-		elif o == "-v":
-			view = a
-		elif o == "-f":
-			infile = a
+	if len(args) != 1:
+		parser.error("incorrect number of arguments")
 
 	# guess stuff if options missing
-	if infile is None:
+	if not options.infile:
 		try:
-			infile = args[0]
+			options.infile = args[0]
 		except IndexError:
 			pass
-	if outfile is None:
+	if not options.outfile:
 		o = sys.stdout
 	else:
-		o = open(outfile, "w")
-	if type is None:
-		type = "eps"
+		o = open(options.outfile, "w")
+	if not options.outputtype:
+		options.outputtype = "png"
 
-	ast = xml.dom.minidom.parse(infile)
+	ast = xml.dom.minidom.parse(options.infile)
 	rack = RackBuilder().build(ast)
-	rack2cairo.RackView(infile).render(rack, o)
+	rack2cairo.RackView(options.infile).render(rack, o)
+
+	return 0
 
 import sys
 
 if __name__ == '__main__':
-	args = sys.argv[1:]
-	r = main(args)
+	r = main()
 	sys.exit(r)
