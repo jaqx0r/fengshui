@@ -6,7 +6,7 @@ from rackbuilder import RackBuilder
 import rack2cairo
 
 def main():
-	parser = OptionParser()
+	parser = OptionParser("usage: %prog [options] [filename]")
 	parser.add_option("-T", "--type", dest="outputtype",
 					  help="Write output in format TYPE", metavar="TYPE")
 	parser.add_option("-o", "--output", dest="outfile",
@@ -16,15 +16,12 @@ def main():
 
 	(options, args) = parser.parse_args()
 
-	if len(args) != 1:
-		parser.error("incorrect number of arguments")
-
 	# guess stuff if options missing
 	if not options.infile:
 		try:
 			options.infile = args[0]
 		except IndexError:
-			pass
+			parser.error("incorrect number of arguments")
 	if not options.outfile:
 		o = sys.stdout
 	else:
