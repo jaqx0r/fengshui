@@ -9,4 +9,8 @@
 	<shelf>
 		<box name="dell" height="305" width="435" label="Dell"/>
 	</shelf>
+
+	<gap units="2"/>
+
+	<apc name="power0"/>
 </rack>
