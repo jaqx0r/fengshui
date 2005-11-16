@@ -6,22 +6,18 @@ from rackbuilder import RackBuilder
 import rack2cairo
 
 def main():
-	parser = OptionParser("usage: %prog [options] [filename]")
+	parser = OptionParser("usage: %prog [options] FILE")
 	parser.add_option("-T", "--type", dest="outputtype",
 					  help="Write output in format TYPE", metavar="TYPE")
 	parser.add_option("-o", "--output", dest="outfile",
 					  help="Write output to file FILE", metavar="FILE")
-	parser.add_option("-f", "--file", dest="infile",
-					  help="Read input from file FILE", metavar="FILE")
 
 	(options, args) = parser.parse_args()
 
 	# guess stuff if options missing
-	if not options.infile:
-		try:
-			options.infile = args[0]
-		except IndexError:
-			parser.error("incorrect number of arguments")
+	if len(args) != 1:
+		parser.error("incorrect number of arguments")
+	infile = args[0]
 	if not options.outfile:
 		o = sys.stdout
 	else:
@@ -29,9 +25,9 @@ def main():
 	if not options.outputtype:
 		options.outputtype = "png"
 
-	ast = xml.dom.minidom.parse(options.infile)
+	ast = xml.dom.minidom.parse(infile)
 	rack = RackBuilder().build(ast)
-	rack2cairo.RackView(options.infile).render(rack, o)
+	rack2cairo.RackView(infile).render(rack, o)
 
 	return 0
 
