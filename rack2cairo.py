@@ -25,9 +25,13 @@ class RackView:
 		self.options = []
 		self.name = name
 
+	def render(self, thing, cr):
+		"""
+		@param thing the rack or racks to be drawn
+		"""
 
-		self.surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
-		self.ctx = cairo.Context(self.surf)
+		self.ctx = cr
+
 		self.ctx.set_line_width(1)
 		#self.ctx.identity_matrix()
 		#self.ctx.scale(205, 660)
@@ -40,12 +44,6 @@ class RackView:
 
 		self.ctx.scale(1, -1)
 		self.ctx.translate(0, -HEIGHT)
-
-	def render(self, thing, output):
-		"""
-		@param thing the rack or racks to be drawn
-		"""
-
 
 		# set the font we're using for the whole picture
 		self.ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL,
@@ -61,8 +59,6 @@ class RackView:
 		else:
 			raise RenderingDumbThingException
 
-		self.surf.write_to_png(output)
-		
 		return None
 	
 	def visitRackArray(self, racks):

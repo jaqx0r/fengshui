@@ -3,6 +3,7 @@
 from optparse import OptionParser
 import xml.dom.minidom
 from rackbuilder import RackBuilder
+import cairo
 import rack2cairo
 
 def main():
@@ -29,8 +30,12 @@ def main():
 
 	ast = xml.dom.minidom.parse(infile)
 	rack = RackBuilder().build(ast)
-	rack2cairo.RackView(infile).render(rack, o)
+	surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, rack2cairo.WIDTH, rack2cairo.HEIGHT)
+	ctx = cairo.Context(surf)
+	rack2cairo.RackView(infile).render(rack, ctx)
 
+	surf.write_to_png(o)
+	
 	return 0
 
 import sys
