@@ -34,7 +34,7 @@ class RackBuilder:
 				elif node.nodeName == "switch":
 					e = rack.Switch()
 				elif node.nodeName == "shelf":
-					e = rack.Shelf1RU()
+					e = rack.ShelfThin()
 				elif node.nodeName == "box":
 					e = rack.Box()
 				elif node.nodeName == "apc":
