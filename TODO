@@ -4,10 +4,6 @@
 
 - wrap in a scroll guy.  zoom, panning.
 
-- refactor unit size calculations, out of rack.py, put all into rack2cairo
-
-- move shelf child code into RackElement, allowing all RackElements to carry children
-
 - remove 'affinity' tag, assume top to bottom fill
 
 - ? add align tag for box elements to put on right hand side of rack?
