@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from math import ceil
+from rack2cairo import unitsize
 
 class OverlapException:
 	pass
@@ -117,6 +118,11 @@ class RackElement(object):
 		self.image = image
 		self.notes = notes
 		self._elements = []
+		print "units on %s is %s" % (self.__class__.__name__, units)
+		self._baseline = units * unitsize
+		print "baseline on %s is %s" % (self.__class__.__name__, self._baseline)
+		# evil hack
+		self.gap = 0
 
 	def addElement(self, element):
 		self._elements.append(element)
@@ -129,10 +135,22 @@ class RackElement(object):
 		return visitor.visitRackElement(self)
 
 	def _get_units(self):
-		return self._units
+		h = 0
+		for e in self._elements:
+			if e.height > h:
+				h = e.height
+		if self.__class__.__name__ == "Shelf1RU":
+			h += self._baseline
+		u = int(ceil(h / unitsize))
+		if self.__class__.__name__ != "Shelf1RU":
+			u += self._units
+		# evil hack
+		u -= self.gap
+		return u
 
-	def _set_units(self, value):
-		self._units = int(value)
+	def _set_units(self, units):
+		self._units = int(units)
+		self._baseline = self._units * unitsize
 
 	units = property(_get_units, _set_units)
 
@@ -183,9 +201,18 @@ class CableManagement(RackElement):
 class Gap(RackElement):
 	def __init__(self, units=1, name="gap"):
 		RackElement.__init__(self, units, name, 0, 0, 0)
+		self.units = units
 
 	def visit(self, visitor):
 		return visitor.visitGap(self)
+
+	def _get_units(self):
+		return self._units
+
+	def _set_units(self, units):
+		self._units = int(units)
+
+	units = property(_get_units, _set_units)
 
 class Switch(RackElement):
 	def __init__(self, units=1, name="switch", network=1, power=1, cliplock=4, image="", notes=""):
@@ -245,22 +272,20 @@ class Shelf(RackElement):
 
 	gap = property(_get_gap, _set_gap)
 
-	def _get_units(self):
-		h = 0
-		for e in self._elements:
-			if e.height > h:
-				h = e.height
-		h += self._baseline
-		# XXX: hardcoded unit height
-		u = int(ceil(h / 43.5))
-		# evil hack
-		u -= self.gap
-		return u
+# 	def _get_units(self):
+# 		h = 0
+# 		for e in self._elements:
+# 			if e.height > h:
+# 				h = e.height
+# 		h += self._baseline
+# 		u = int(ceil(h/unitsize))
+# 		u -= self.gap
+# 		return u
 
-	def _set_units(self, units):
-		pass
+# 	def _set_units(self, units):
+# 		pass
 
-	units = property(_get_units, _set_units)
+# 	return 
 
 class Shelf1RU(Shelf):
 	def __init__(self, units=1, name = "1RU shelf", network=0, power=0, cliplock=4, gap=0, notes=""):
