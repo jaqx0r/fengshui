@@ -278,14 +278,14 @@ class RackView:
 		#self.ctx.newpath()
 		self.ctx.move_to(0, 0)
 		self.ctx.line_to(rackwidth, 0)
-		self.ctx.line_to(rackwidth, element.units * unitsize)
-		self.ctx.line_to(0, element.units * unitsize)
+		self.ctx.line_to(rackwidth, element._units * unitsize)
+		self.ctx.line_to(0, element._units * unitsize)
 		#self.ctx.closepath()
 		self.ctx.stroke()
 
 		# label
 		#self.ctx.newpath()
-		self.ctx.move_to(5, element.units * unitsize - 14 - 5)
+		self.ctx.move_to(5, element._units * unitsize - 14 - 5)
 		self.ctx.save()
 		self.ctx.scale(1, -1)
 		if hasattr(element, 'label'):
@@ -296,6 +296,8 @@ class RackView:
 		self.ctx.fill_preserve()
 		self.ctx.stroke()
 		self.ctx.restore()
+
+		self.visitShelfElements(element)
 		
 		self.ctx.restore()
 
@@ -379,12 +381,15 @@ class RackView:
 		"""
 
 		self.visitShelf(shelf)
+		self.visitShelfElements(shelf)
 
+	def visitShelfElements(self, shelf):
 		x = 0
 		for e in shelf._elements:
 			# put each shelf element on the shelf, and move across so they
 			# don't sit on top of each other
 			self.ctx.save()
+			print "drawing baseline of %s for %s" % (shelf._baseline, shelf.__class__.__name__)
 			self.ctx.translate(x, shelf._baseline)
 
 			self.visitShelfElement(e)

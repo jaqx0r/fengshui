@@ -35,9 +35,6 @@ class RackBuilder:
 					e = rack.Switch()
 				elif node.nodeName == "shelf":
 					e = rack.Shelf1RU()
-					# Walk the child nodes.
-					for c in self.walk(node):
-						e += c
 				elif node.nodeName == "box":
 					e = rack.Box()
 				elif node.nodeName == "apc":
@@ -46,6 +43,15 @@ class RackBuilder:
 					e = rack.Gap()
 				else:
 					raise NotImplementedError, "no handler for a %s" % node.nodeName
+
+				# Walk the child nodes.
+				for c in self.walk(node):
+					e += c
+
+				try:
+					print "element %s is %s units" % (e.__class__.__name__, e.units)
+				except AttributeError:
+					pass
 				
 				attrs = node.attributes							 # [2]
 				for attrName in attrs.keys():
