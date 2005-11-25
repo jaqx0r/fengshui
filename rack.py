@@ -139,10 +139,10 @@ class RackElement(object):
 		for e in self._elements:
 			if e.height > h:
 				h = e.height
-		if self.__class__.__name__ == "Shelf1RU":
+		if self.__class__.__name__[:5] == "Shelf":
 			h += self._baseline
 		u = int(ceil(h / unitsize))
-		if self.__class__.__name__ != "Shelf1RU":
+		if self.__class__.__name__[:5] != "Shelf":
 			u += self._units
 		# evil hack
 		u -= self.gap
@@ -169,6 +169,9 @@ class RackElement(object):
 		self.__power = int(value)
 
 	power = property(_get_power, _set_power)
+
+	def visit(self, visitor):
+		return getattr(visitor, 'visit%s' % (self.__class__.__name__,))(self)
 
 class Rackmount(RackElement):
 	def __init__(self, units=1, name="rackmount", network=1, power=1, cliplock=4, image="", notes=""):
@@ -285,7 +288,14 @@ class Shelf(RackElement):
 # 	def _set_units(self, units):
 # 		pass
 
-# 	return 
+# 	return
+
+class ShelfThin(Shelf):
+	def __init__(self, units=1, name="Thin Black Shelf", network=0, power=0, cliplock=4, gap=0, notes=""):
+		Shelf.__init__(self, units, name, network, power, cliplock, gap, notes)
+		self._baseline=11
+		self._bottomline=0
+		self._bracketunits=0.3
 
 class Shelf1RU(Shelf):
 	def __init__(self, units=1, name = "1RU shelf", network=0, power=0, cliplock=4, gap=0, notes=""):
