@@ -116,6 +116,14 @@ class RackElement(object):
 		self.cliplock = cliplock
 		self.image = image
 		self.notes = notes
+		self._elements = []
+
+	def addElement(self, element):
+		self._elements.append(element)
+
+	def __iadd__(self, o):
+		self._elements.append(o)
+		return self
 
 	def visit(self, visitor):
 		return visitor.visitRackElement(self)
@@ -197,16 +205,12 @@ class Shelf(RackElement):
 	def __init__(self, units=1, name = "shelf", network=0, power=0, cliplock=4, gap=0, notes=""):
 		RackElement.__init__(self, units, name, network, power, cliplock, notes)
 
-		self._elements = []
 		self._baseline = 43.5
 		self._bottomline = 0
 		self._bracketunits = 1
 		# hack to allow us to tell the builder if the elem above it has
 		# enough space to allow things to go into its space
 		self.gap = gap
-
-	def addElement(self, element):
-		self._elements.append(element)
 
 	def visit(self, visitor):
 		return visitor.visitShelf(self)
@@ -232,10 +236,6 @@ class Shelf(RackElement):
 		self.__power = int(value)
 
 	power = property(_get_power, _set_power)
-
-	def __iadd__(self, o):
-		self._elements.append(o)
-		return self
 
 	def _get_gap(self):
 		return self.__gap
