@@ -438,6 +438,7 @@ class RackView:
 			self.ctx.line_to(rackwidth, bh)
 			self.ctx.line_to(rackwidth, shelf._baseline)
 			#self.ctx.closepath()
+			self.ctx.line_to(0, shelf._baseline)
 			stroke()
 
 	def visitShelfElement(self, element):
