@@ -88,19 +88,19 @@ class RackView:
 		# full outline of rack and brackets
 		self.ctx.save()
 		self.ctx.set_source_rgba(0.25, 0.25, 0.25, 1)
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(-bracketwidth, 0)
 		self.ctx.line_to(-bracketwidth, rackheight)
 		self.ctx.line_to(rackwidth + bracketwidth, rackheight)
 		self.ctx.line_to(rackwidth + bracketwidth, 0)
-		#self.ctx.closepath()
+		self.ctx.close_path()
 		self.ctx.stroke()
 		# rack outline
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(0, 0)
 		self.ctx.line_to(0, rackheight)
 		self.ctx.stroke()
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(rackwidth, 0)
 		self.ctx.line_to(rackwidth, rackheight)
 		self.ctx.stroke()
@@ -170,33 +170,33 @@ class RackView:
 			# reset frame of reference
 			self.ctx.translate(-bracketwidth-barwidth, 0)
 		
-			#self.ctx.newpath()
+			self.ctx.new_path()
 			self.ctx.move_to(20, 0)
 			self.ctx.line_to(20, element.units * unitsize)
 			self.ctx.stroke()
 			# top and bottom edges
-			#self.ctx.newpath()
+			self.ctx.new_path()
 			self.ctx.move_to(10, 0)
 			self.ctx.line_to(30, 0)
 			self.ctx.stroke()
-			#self.ctx.newpath()
+			self.ctx.new_path()
 			self.ctx.move_to(10, element.units * unitsize)
 			self.ctx.line_to(30, element.units * unitsize)
 			self.ctx.stroke()
 			# arrowheads
-			#self.ctx.newpath()
+			self.ctx.new_path()
 			self.ctx.move_to(15, 10)
 			self.ctx.line_to(20, 0)
 			self.ctx.line_to(25, 10)
 			self.ctx.stroke()
-			#self.ctx.newpath()
+			self.ctx.new_path()
 			self.ctx.move_to(15, element.units * unitsize - 10)
 			self.ctx.line_to(20, element.units * unitsize)
 			self.ctx.line_to(25, element.units * unitsize - 10)
 			self.ctx.stroke()
 			# size label
 			self.ctx.set_source_rgba(0.5, 0.5, 0.5, 1.0)
-			#self.ctx.newpath()
+			self.ctx.new_path()
 			self.ctx.move_to(5, element.units * unitsize / 2 - 7)
 			self.ctx.save()
 			self.ctx.scale(1, -1)
@@ -210,7 +210,7 @@ class RackView:
 			self.ctx.save()
 			self.ctx.translate(rackwidth + bracketwidth, 0)
 			self.ctx.set_source_rgba(0.5, 0.5, 0.5, 1)
-			#self.ctx.newpath()
+			self.ctx.new_path()
 			self.ctx.move_to(5, 5)
 			self.ctx.save()
 			self.ctx.scale(1, -1)
@@ -258,12 +258,12 @@ class RackView:
 	def visitEmptyRackElement(self):
 		e = 5
 		self.ctx.set_source_rgba(0.85, 0.85, 0.85, 1.0)
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(e, e)
 		self.ctx.line_to(e, unitsize - e)
 		self.ctx.line_to(rackwidth - e, unitsize - e)
 		self.ctx.line_to(rackwidth - e, e)
-		#self.ctx.closepath()
+		self.ctx.close_path()
 		self.ctx.fill()
 
 	def visitRackmount(self, element):
@@ -275,16 +275,16 @@ class RackView:
 		self.ctx.set_source_rgba(0, 0, 0, 1)
 
 		# outline of shape
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(0, 0)
 		self.ctx.line_to(rackwidth, 0)
 		self.ctx.line_to(rackwidth, element._units * unitsize)
 		self.ctx.line_to(0, element._units * unitsize)
-		#self.ctx.closepath()
+		self.ctx.close_path()
 		self.ctx.stroke()
 
 		# label
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(5, element._units * unitsize - 14 - 5)
 		self.ctx.save()
 		self.ctx.scale(1, -1)
@@ -327,13 +327,13 @@ class RackView:
 		self.ctx.save()
 		self.ctx.set_source_rgba(0, 0, 0, 1)
 		self.ctx.translate(rackwidth - iconwidth - 10, switch.units * unitsize - unitsize / 2.0 - (iconheight / 2.0))
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(0, 0)
 		self.ctx.line_to(offset, 0)
 		self.ctx.line_to(iconwidth - offset, iconheight)
 		self.ctx.line_to(iconwidth, iconheight)
 		self.ctx.stroke()
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(0, iconheight)
 		self.ctx.line_to(offset, iconheight)
 		self.ctx.line_to(iconwidth - offset, 0)
@@ -342,29 +342,29 @@ class RackView:
 
 		arr = 4
 		# arrowheads
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(arr, arr)
 		self.ctx.line_to(0, 0)
 		self.ctx.line_to(arr, -arr)
-		#self.ctx.closepath()
+		self.ctx.close_path()
 		self.ctx.fill()
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(arr, iconheight + arr)
 		self.ctx.line_to(0, iconheight)
 		self.ctx.line_to(arr, iconheight - arr)
-		#self.ctx.closepath()
+		self.ctx.close_path()
 		self.ctx.fill()
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(iconwidth - arr, iconheight + arr)
 		self.ctx.line_to(iconwidth, iconheight)
 		self.ctx.line_to(iconwidth - arr, iconheight - arr)
-		#self.ctx.closepath()
+		self.ctx.close_path()
 		self.ctx.fill()
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(iconwidth - arr, arr)
 		self.ctx.line_to(iconwidth, 0)
 		self.ctx.line_to(iconwidth - arr, -arr)
-		#self.ctx.closepath()
+		self.ctx.close_path()
 		self.ctx.fill()
 		self.ctx.restore()
 
@@ -408,7 +408,7 @@ class RackView:
 
 		for (gray, stroke) in [(0.6, self.ctx.fill), (0, self.ctx.stroke)]:
 			self.ctx.set_source_rgba(gray, gray, gray, 1.0)
-			#self.ctx.newpath()
+			self.ctx.new_path()
 			# start at the baseline which is relative to the bottom
 			# of the rack unit
 			self.ctx.move_to(0, shelf._baseline)
@@ -437,7 +437,7 @@ class RackView:
 			# close it off
 			self.ctx.line_to(rackwidth, bh)
 			self.ctx.line_to(rackwidth, shelf._baseline)
-			#self.ctx.closepath()
+			self.ctx.close_path()
 			stroke()
 
 	def visitShelfElement(self, element):
@@ -446,16 +446,16 @@ class RackView:
 		"""
 
 		self.ctx.set_source_rgba(0, 0, 0, 1.0)
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(0, 0)
 		self.ctx.line_to(element.width, 0)
 		self.ctx.line_to(element.width, element.height)
 		self.ctx.line_to(0, element.height)
-		#self.ctx.closepath()
+		self.ctx.close_path()
 		self.ctx.stroke()
 
 		# draw label
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(5, element.height - 14 - 5)
 		self.ctx.save()
 		self.ctx.scale(1, -1)
@@ -477,12 +477,12 @@ class RackView:
 		self.ctx.set_source_rgba(0, 0, 0, 1.0)
 		
 		# draw outline
-		#self.ctx.newpath()
+		self.ctx.new_path()
 		self.ctx.move_to(0, 0)
 		self.ctx.line_to(rackwidth, 0)
 		self.ctx.line_to(rackwidth, cman.units * unitsize)
 		self.ctx.line_to(0, cman.units * unitsize)
-		#self.ctx.closepath()
+		self.ctx.close_path()
 		self.ctx.stroke()
 
 		# draw cable holding things
@@ -491,20 +491,20 @@ class RackView:
 				self.ctx.save()
 				self.ctx.set_source_rgba(black, black, black, 1.0)
 
-				#self.ctx.newpath()
+				self.ctx.new_path()
 				self.ctx.move_to(x - 5, 0)
 				self.ctx.line_to(x - 5, cman.units * unitsize / 2 - 5)
 				self.ctx.line_to(x + 5, cman.units * unitsize / 2 - 5)
 				self.ctx.line_to(x + 5, 0)
-				#self.ctx.closepath()
+				self.ctx.close_path()
 				fill()
 
-				#self.ctx.newpath()
+				self.ctx.new_path()
 				self.ctx.move_to(x - 5, cman.units * unitsize)
 				self.ctx.line_to(x - 5, cman.units * unitsize / 2 + 5)
 				self.ctx.line_to(x + 5, cman.units * unitsize / 2 + 5)
 				self.ctx.line_to(x + 5, cman.units * unitsize)
-				#self.ctx.closepath()
+				self.ctx.close_path()
 				fill()
 			
 				self.ctx.restore()
