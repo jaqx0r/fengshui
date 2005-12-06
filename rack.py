@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 from math import ceil
-from rack2cairo import unitsize
 
 class OverlapException:
 	pass
@@ -11,6 +10,8 @@ class OutOfRackException:
 
 class RackFullException:
 	pass
+
+unitsize = 43.5
 
 class Rack(object):
 	def __init__(self, name, attr, units):
@@ -22,6 +23,12 @@ class Rack(object):
 		self._elements = {}
 
 		self.__attributes = attr
+
+
+		## size things
+		self.width = 445
+		self.height = unitsize * self.units
+
 
 	def addElement(self, position, element):
 		if position > self.units or position < 0:
