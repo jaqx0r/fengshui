@@ -13,7 +13,7 @@ class RackBuilder:
 		try:
 			units = rootNode.attributes.get('units').nodeValue
 		except AttributeError:
-			units = 46
+			units = 47
 		r = rack.Rack('rack', {}, units)
 		for attrName in rootNode.attributes.keys():
 			aNode = rootNode.attributes.get(attrName)
