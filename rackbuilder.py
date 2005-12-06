@@ -10,7 +10,11 @@ class RackBuilder:
 
 	def build(self, dom):
 		rootNode = dom.documentElement
-		r = rack.Rack('rack', {}, 47)
+		try:
+			units = rootNode.attributes.get('units').nodeValue
+		except AttributeError:
+			units = 46
+		r = rack.Rack('rack', {}, units)
 		for attrName in rootNode.attributes.keys():
 			aNode = rootNode.attributes.get(attrName)
 			aValue = aNode.nodeValue
