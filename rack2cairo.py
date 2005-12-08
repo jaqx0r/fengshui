@@ -462,7 +462,7 @@ class RackView:
 		self.ctx.save()
 		self.ctx.scale(1, -1)
 		if hasattr(element, 'label'):
-			label = "%s (%s)" % (element.name, element.label)
+			label = element.label
 		else:
 			label = element.name
 		self.ctx.text_path("%s" % (label,))
