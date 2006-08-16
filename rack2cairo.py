@@ -294,10 +294,26 @@ class RackView:
 			label = element.label
 		else:
 			label = element.name
+		self.ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL,
+								  cairo.FONT_WEIGHT_NORMAL)
 		self.ctx.text_path("%s" % (label,))
 		self.ctx.fill_preserve()
 		self.ctx.stroke()
 		self.ctx.restore()
+
+		# print the name in gray
+		if hasattr(element, 'label'):
+			self.ctx.save()
+			gray = 0.6
+			self.ctx.set_source_rgba(gray, gray, gray, 0.5)
+			self.ctx.new_path()
+			self.ctx.move_to(unitsize, 10)
+			self.ctx.set_font_size(40)
+			self.ctx.scale(1, -1)
+			self.ctx.text_path("%s" % (element.name,))
+			self.ctx.fill_preserve()
+			self.ctx.stroke()
+			self.ctx.restore()
 
 		self.visitShelfElements(element)
 		
